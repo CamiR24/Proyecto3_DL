@@ -27,8 +27,14 @@ def model_configured():
 def completion(messages, tools=None):
     if not model_configured():
         raise ValueError('Falta configurar LLM_API_KEY y LLM_MODEL en .env. Puedes cargar y explorar archivos sin LLM.')
-    body = {'model': os.environ['LLM_MODEL'], 'messages': messages,
-            'response_format': {'type': 'json_object'}, 'max_completion_tokens': 6000}
+    body = {
+        'model': os.environ['LLM_MODEL'],
+        'messages': messages,
+        'max_completion_tokens': 6000,
+    }
+
+    if os.environ['LLM_MODEL'] == 'claude-haiku-5-5':
+        body['thinking'] = {'type': 'disabled'}
     if tools:
         body.update(tools=tools, tool_choice='auto', parallel_tool_calls=False)
     url = os.getenv('LLM_BASE_URL', 'https://api.openai.com/v1').rstrip('/') + '/chat/completions'
@@ -55,12 +61,40 @@ def completion(messages, tools=None):
 
 
 def parse_json(message):
+    content = message.get('content')
+
+    if not isinstance(content, str) or not content.strip():
+        raise ValueError('El modelo devolvió una respuesta vacía.')
+
+    content = content.strip()
+    lines = content.splitlines()
+
+    # Aceptar un bloque Markdown que contenga únicamente JSON.
+    if (
+        len(lines) >= 3
+        and lines[0].strip().lower() in {'```json', '```'}
+        and lines[-1].strip() == '```'
+    ):
+        content = '\n'.join(lines[1:-1]).strip()
+
     try:
-        value = json.loads(message.get('content') or '')
-    except (ValueError, TypeError) as exc:
-        raise ValueError('El modelo no devolvió un JSON completo. No se mostrarán resultados inventados.') from exc
+        value = json.loads(content)
+    except json.JSONDecodeError as exc:
+        # Mostrar un fragmento en la terminal para diagnosticar el formato.
+        preview = content[:600]
+        key = os.getenv('LLM_API_KEY', '')
+        if key:
+            preview = preview.replace(key, '[LLAVE OCULTA]')
+        print('Respuesta no interpretable:', repr(preview))
+
+        raise ValueError(
+            'La respuesta no tiene un formato JSON válido. '
+            'Revisa el detalle en la terminal.'
+        ) from exc
+
     if not isinstance(value, dict):
         raise ValueError('Se esperaba un objeto JSON.')
+
     return value
 
 
