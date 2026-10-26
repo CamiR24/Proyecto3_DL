@@ -1,0 +1,37 @@
+             Universidad del Valle de Guatemala
+             Facultad de Ingeniería
+             Ciencia de la Computación y Tecnologías de la Información
+             Construcción de Compiladores                                            2026, II
+
+
+
+                Proyecto 01 - Rúbrica de evaluación
+Fecha de entrega: lunes 05 de octubre de 2026
+Horario: 13:00 horas
+Modalidad: en grupos (máximo: tres personas)
+Ponderación: 25 puntos
+
+ Funcionalidad                                                                 Ponderación
+ Diseño del código intermedio.                                                           3
+ Generación de código intermedio para: declaración y asignación de                       1
+ variables y constantes.
+ Generación de código intermedio para: expresiones aritméticas.                            1
+ Generación de código intermedio para: expresiones lógicas.                                1
+ Generación de código intermedio para: arreglos.                                           1
+ Generación de código intermedio para: sentencias de control (if, else,                    3
+ while, for, foreach, switch case, etc.).
+ Generación de código intermedio para: funciones y parámetros.                             2
+ Generación de código intermedio para: recursividad.                                       2
+ Generación de código intermedio para: clases y objetos.                                   2
+ Generación de código intermedio para: herencia.                                           2
+ Generación de código intermedio para: try y catch.                                        2
+ Reciclaje de variables temporales.                                                        3
+ Nuevas funcionalidades en tabla de símbolos.                                              2
+ Total                                                                                    25
+
+
+
+
+                                                                                 Carlos Valdez
+                                                                          cjvaldez@uvg.edu.gt
+

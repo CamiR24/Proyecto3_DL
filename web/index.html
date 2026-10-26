@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Antes de entregar · Revisor con evidencia</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header class="topbar"><a class="brand" href="/" aria-label="Antes de entregar, inicio"><span class="brand-mark">✓</span> Antes de entregar<span class="beta">PROTOTIPO</span></a><span class="byline">Camila &amp; Marinés · Deep Learning</span></header>
+<div class="layout">
+<aside class="sidebar">
+ <p class="eyebrow">TU REVISIÓN, PASO A PASO</p>
+ <nav aria-label="Pasos de revisión">
+  <button class="step active" data-step="1"><span class="step-number">01</span><span><strong>Prepara tu entrega</strong><small>Instrucciones, rúbrica y archivos</small></span></button>
+  <button class="step" data-step="2" disabled><span class="step-number">02</span><span><strong>Confirma los criterios</strong><small>Tú decides qué se revisa</small></span></button>
+  <button class="step" data-step="3" disabled><span class="step-number">03</span><span><strong>Revisa y mejora</strong><small>Observaciones con evidencia</small></span></button>
+ </nav>
+ <div class="side-note"><span class="note-icon">↗</span><h3>Una segunda mirada.</h3><p>Encuentra pendientes antes de entregar. Conserva el criterio final sobre tu trabajo.</p></div>
+ <div class="connection"><span id="connection-dot" class="dot"></span><span id="connection-label">Conectando…</span></div>
+</aside>
+<main>
+ <div id="notice" role="status" aria-live="polite" hidden></div>
+ <section id="step-1" class="page">
+  <p class="eyebrow">MENOS DUDAS. MÁS CLARIDAD.</p><h1>Tu esfuerzo merece<br>una última revisión<span class="accent">.</span></h1>
+  <p class="lead">Compara tu entrega con lo que te pidieron y descubre qué puedes mejorar, con referencias a tus propios archivos.</p>
+  <div class="section-heading"><h2>01 <span>Prepara el contexto</span></h2><button id="example" class="text-button">Probar con el ejemplo de Compiscript ↗</button></div>
+  <div class="card upload-card">
+   <label for="instructions">¿Qué pide la actividad? <span class="required">Obligatorio si no adjuntas rúbrica</span></label>
+   <textarea id="instructions" rows="6" maxlength="40000" placeholder="Pega las instrucciones, condiciones y restricciones de tu actividad…"></textarea>
+   <div class="upload-grid">
+    <label class="file-box" for="rubric"><span class="file-icon">≡</span><strong>Tu rúbrica</strong><span>PDF con texto, TXT o MD · opcional si la pegaste arriba</span><input id="rubric" type="file" accept=".pdf,.txt,.md"><small id="rubric-name">Selecciona un archivo</small></label>
+    <label class="file-box" for="submission"><span class="file-icon">↥</span><strong>Tu entrega</strong><span>PDF con texto, TXT, MD, código o ZIP · hasta 80 MiB</span><input id="submission" type="file" accept=".pdf,.txt,.md,.zip,.py,.tsx,.ts,.js,.json"><small id="submission-name">Selecciona un archivo</small></label>
+   </div>
+   <div class="card-footer"><p>Los archivos se preparan localmente. No se envían al modelo hasta que lo autorices en el siguiente paso.</p><button id="prepare" class="primary">Continuar <span>→</span></button></div>
+  </div>
+  <div class="features"><div><span>01 /</span><strong>Requisitos claros</strong><p>Confirma cada criterio antes de revisar.</p></div><div><span>02 /</span><strong>Evidencia localizada</strong><p>Consulta el archivo y las líneas citadas.</p></div><div><span>03 /</span><strong>Próximos pasos útiles</strong><p>Identifica qué corregir y qué verificar.</p></div></div>
+ </section>
+ <section id="step-2" class="page" hidden>
+  <p class="eyebrow">ANTES DE PEDIR UNA SEGUNDA MIRADA</p><h1>¿Qué vamos a revisar<span class="accent">?</span></h1><p class="lead">Confirma los criterios y comprueba qué archivos se pudieron leer.</p>
+  <div class="card"><div class="section-heading"><h2>Criterios de revisión</h2><button id="extract" class="secondary">Proponer con IA</button></div>
+   <p class="muted">Escribe un criterio por línea. Usa <code>[R]</code> al inicio para marcar una restricción obligatoria. Máximo 30.</p>
+   <label for="criteria">Criterios que confirmas para esta revisión</label><textarea id="criteria" rows="12" placeholder="Generación de código intermedio para expresiones aritméticas.&#10;[R] No generar representación intermedia si se encuentra algún error."></textarea>
+   <label class="check"><input id="consent" type="checkbox"><span>Autorizo enviar al proveedor del modelo las instrucciones, los criterios y el texto seleccionado de mi entrega. Revisé que no incluyan datos privados o credenciales.</span></label>
+   <div class="options"><div><label for="mode">Método de revisión</label><select id="mode"><option value="improved">Revisión con evidencia · v1</option><option value="baseline">Baseline · prompt simple</option></select></div><label class="check"><input id="allow-execution" type="checkbox"><span>Permitir que la IA solicite las cinco pruebas de Compiscript en Docker, si esta entrega es compatible.</span></label></div>
+   <div class="card-footer"><p>Las propuestas de IA pueden omitir o interpretar mal un requisito. Confírmalas antes de continuar.</p><button id="review" class="primary">Revisar mi entrega →</button></div>
+  </div>
+  <details class="card"><summary>Archivos y cobertura de la revisión <span id="coverage-count"></span></summary><div id="coverage-warnings"></div><div id="file-list"></div></details>
+  <details class="card"><summary>Instrucciones y rúbrica leídas</summary><pre id="assignment-preview"></pre></details>
+ </section>
+ <section id="step-3" class="page" hidden>
+  <p class="eyebrow">UNA GUÍA PARA TU SIGUIENTE VERSIÓN</p><div class="result-heading"><div><h1>Revisa. Ajusta. Entrega<span class="accent">.</span></h1><p class="lead">Cada observación debe poder rastrearse hasta su evidencia.</p></div><button id="export" class="secondary" disabled>↓ Descargar revisión</button></div>
+  <div id="metrics" class="metrics"></div><p id="report-notice" class="muted"></p>
+  <div class="result-toolbar"><label for="filter">Mostrar</label><select id="filter"><option value="all">Todos los criterios</option><option value="pending">Pendientes y no verificables</option><option value="restriccion">Restricciones obligatorias</option></select><button id="edit" class="text-button">Volver a criterios ↗</button></div>
+  <div id="results"></div>
+
+ </section>
+  <div class="card execution" hidden><div class="section-heading"><h2>Comprobar comportamiento</h2><button id="run" class="secondary">Ejecutar 5 pruebas</button></div><p class="muted">Disponible para el perfil Python de Compiscript incluido en el ejemplo. Se ejecuta el analizador y generador de TAC, sin ejecutar el programa Compiscript.</p><p id="runner-status"></p><div id="execution-results"></div><p class="muted">Después de ejecutar, vuelve a revisar con IA para incorporar esta evidencia al análisis.</p></div>
+ <footer>Retroalimentación orientativa, sin nota automática. <button id="clear" class="text-button" hidden>Eliminar mi revisión</button></footer>
+</main></div><script src="/app.js" defer></script>
+</body></html>

@@ -1,0 +1,24 @@
+Diseño del código intermedio (3 puntos).
+Generación de código intermedio para declaración y asignación de variables y constantes (1 punto).
+Generación de código intermedio para expresiones aritméticas (1 punto).
+Generación de código intermedio para expresiones lógicas (1 punto).
+Generación de código intermedio para arreglos (1 punto).
+Generación de código intermedio para sentencias de control if, else, while, for, foreach y switch case según la especificación (3 puntos).
+Generación de código intermedio para funciones y parámetros (2 puntos).
+Generación de código intermedio para recursividad (2 puntos).
+Generación de código intermedio para clases y objetos (2 puntos).
+Generación de código intermedio para herencia (2 puntos).
+Generación de código intermedio para try y catch (2 puntos).
+Reciclaje de variables temporales (3 puntos).
+Nuevas funcionalidades en tabla de símbolos (2 puntos).
+[R] Trabajar en los grupos conformados al principio del semestre.
+[R] El lenguaje de entrada debe ser Compiscript.
+[R] Usar una herramienta generadora de analizadores; no implementar lexer o parser de forma completamente manual (incumplimiento: cero puntos).
+[R] Contar con una interfaz gráfica amigable y estética (incumplimiento: menos cinco puntos).
+[R] Seleccionar el archivo de entrada desde la interfaz gráfica (incumplimiento: menos cinco puntos).
+[R] Mostrar resultados del análisis y representación intermedia dentro de la interfaz, no solo en consola (incumplimiento: menos cinco puntos).
+[R] Incluir archivos de prueba escritos por el grupo.
+[R] Recuperarse de errores e intentar reportar múltiples errores en una misma ejecución (incumplimiento: menos cinco puntos).
+[R] Evitar repetición del mismo error, ciclos infinitos y mensajes derivados inútiles durante la recuperación (incumplimiento: menos cinco puntos).
+[R] No generar representación intermedia si existe cualquier error léxico, sintáctico o semántico.
+[R] Limitarse al análisis y representación intermedia; no ejecutar el programa ni producir código objeto (incumplimiento: cero puntos).
