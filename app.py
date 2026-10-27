@@ -90,7 +90,9 @@ class Handler(BaseHTTPRequestHandler):
                               'model': os.getenv('LLM_MODEL', ''), 'runner': readiness()})
         files = {'/': ('index.html', 'text/html; charset=utf-8'),
                  '/app.js': ('app.js', 'text/javascript; charset=utf-8'),
-                 '/style.css': ('style.css', 'text/css; charset=utf-8')}
+                 '/style.css': ('style.css', 'text/css; charset=utf-8'),
+                 '/resultados.js': ('resultados.js', 'text/javascript; charset=utf-8'),
+                 '/resultados.css': ('resultados.css', 'text/css; charset=utf-8')}
         if path in files:
             name, kind = files[path]
             return self.send((ROOT / 'web' / name).read_bytes(), content_type=kind)

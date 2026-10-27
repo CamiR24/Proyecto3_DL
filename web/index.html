@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Antes de entregar · Revisor con evidencia</title><link rel="stylesheet" href="/style.css"></head>
+<title>Antes de entregar · Revisor con evidencia</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/resultados.css"></head>
 <body>
 <header class="topbar"><a class="brand" href="/" aria-label="Antes de entregar, inicio"><span class="brand-mark">✓</span> Antes de entregar<span class="beta">PROTOTIPO</span></a><span class="byline">Camila &amp; Marinés · Deep Learning</span></header>
 <div class="layout">
@@ -17,6 +17,12 @@
 </aside>
 <main>
  <div id="notice" role="status" aria-live="polite" hidden></div>
+ <section id="progress" class="progress" role="status" aria-live="polite" hidden>
+  <div class="progress-head"><span class="spinner" aria-hidden="true"></span><div><strong id="progress-title"></strong><p id="progress-detail" class="muted"></p></div><span id="progress-time" class="progress-time" aria-hidden="true">0:00</span></div>
+  <div class="progress-bar" aria-hidden="true"><i></i></div>
+  <ol id="progress-steps"></ol>
+  <p id="progress-long" hidden></p>
+ </section>
  <section id="step-1" class="page">
   <p class="eyebrow">MENOS DUDAS. MÁS CLARIDAD.</p><h1>Tu esfuerzo merece<br>una última revisión<span class="accent">.</span></h1>
   <p class="lead">Compara tu entrega con lo que te pidieron y descubre qué puedes mejorar, con referencias a tus propios archivos.</p>
@@ -45,13 +51,20 @@
   <details class="card"><summary>Instrucciones y rúbrica leídas</summary><pre id="assignment-preview"></pre></details>
  </section>
  <section id="step-3" class="page" hidden>
-  <p class="eyebrow">UNA GUÍA PARA TU SIGUIENTE VERSIÓN</p><div class="result-heading"><div><h1>Revisa. Ajusta. Entrega<span class="accent">.</span></h1><p class="lead">Cada observación debe poder rastrearse hasta su evidencia.</p></div><button id="export" class="secondary" disabled>↓ Descargar revisión</button></div>
+  <p class="eyebrow">UNA GUÍA PARA TU SIGUIENTE VERSIÓN</p><div class="result-heading"><div><h1 id="step-3-title" tabindex="-1">Revisa. Ajusta. Entrega<span class="accent">.</span></h1><p class="lead">Cada observación debe poder rastrearse hasta su evidencia.</p></div><button id="export" class="secondary" disabled>↓ Descargar revisión (JSON)</button></div>
+  <div id="coverage-banner" class="banner" hidden></div>
+  <div id="validation-banner" class="banner" hidden></div>
   <div id="metrics" class="metrics"></div><p id="report-notice" class="muted"></p>
-  <div class="result-toolbar"><label for="filter">Mostrar</label><select id="filter"><option value="all">Todos los criterios</option><option value="pending">Pendientes y no verificables</option><option value="restriccion">Restricciones obligatorias</option></select><button id="edit" class="text-button">Volver a criterios ↗</button></div>
+  <details class="card legend"><summary>Cómo leer los estados y el respaldo</summary>
+   <dl><dt>Cumplido</dt><dd>Hay evidencia suficiente para el alcance del criterio.</dd><dt>Parcial</dt><dd>Hay avance demostrado, pero falta una parte.</dd><dt>Faltante</dt><dd>No hay rastro del requisito en una entrega revisada por completo.</dd><dt>No verificable</dt><dd>La evidencia enviada no basta para concluir. No significa que falte.</dd></dl>
+   <p>El <strong>respaldo</strong> lo calcula la aplicación según las citas que sí coinciden con tus archivos: alto (ejecución registrada), medio (código), bajo (solo documentación o pruebas escritas) o sin respaldo. No es una probabilidad del modelo. El modelo puede equivocarse aun con respaldo alto: comprueba la evidencia.</p></details>
+  <div id="state-bar" class="state-bar" role="img"></div>
+  <div class="result-toolbar"><div id="state-chips" class="chips" role="group" aria-label="Filtrar por estado"></div><label class="check"><input id="only-restrictions" type="checkbox"><span>Solo restricciones obligatorias</span></label></div>
+  <div class="result-actions"><button id="copy-pending" class="secondary" disabled>Copiar lista de pendientes</button><button id="download-pending" class="secondary" disabled>↓ Pendientes (.md)</button><button id="expand-all" class="text-button">Expandir evidencias</button><span id="review-progress" aria-live="polite"></span><button id="edit" class="text-button">Volver a criterios ↗</button></div>
   <div id="results"></div>
 
  </section>
   <div class="card execution" hidden><div class="section-heading"><h2>Comprobar comportamiento</h2><button id="run" class="secondary">Ejecutar 5 pruebas</button></div><p class="muted">Disponible para el perfil Python de Compiscript incluido en el ejemplo. Se ejecuta el analizador y generador de TAC, sin ejecutar el programa Compiscript.</p><p id="runner-status"></p><div id="execution-results"></div><p class="muted">Después de ejecutar, vuelve a revisar con IA para incorporar esta evidencia al análisis.</p></div>
  <footer>Retroalimentación orientativa, sin nota automática. <button id="clear" class="text-button" hidden>Eliminar mi revisión</button></footer>
-</main></div><script src="/app.js" defer></script>
+</main></div><script src="/app.js" defer></script><script src="/resultados.js" defer></script>
 </body></html>

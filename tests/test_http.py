@@ -88,6 +88,22 @@ class HTTPTest(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertFalse(result['executed'])
 
+    def test_serves_every_page_asset_the_html_references(self):
+        for path, kind in [('/', 'text/html'), ('/app.js', 'text/javascript'), ('/resultados.js', 'text/javascript'),
+                           ('/style.css', 'text/css'), ('/resultados.css', 'text/css')]:
+            with urllib.request.urlopen(self.base + path) as response:
+                self.assertEqual(response.status, 200, path)
+                self.assertTrue(response.headers['Content-Type'].startswith(kind), path)
+
+    def test_review_report_includes_format_validation(self):
+        session = self.ingest()
+        raw = {'results': [{'criterion_id': 'C01', 'state': 'raro'}]}
+        with patch('revisor.llm.completion', return_value=({'content': json.dumps(raw)}, {})):
+            status, report = self.post('/api/review', {'session_id': session['session_id'], 'criteria_text': 'Criterio'})
+        self.assertEqual(status, 200)
+        self.assertEqual(report['validation']['invalid_states'], 1)
+        self.assertEqual(report['results'][0]['state'], 'no_verificable')
+
     def test_missing_api_key_returns_actionable_error(self):
         session = self.ingest()
         with patch.dict(os.environ, {'LLM_API_KEY': '', 'LLM_MODEL': ''}):

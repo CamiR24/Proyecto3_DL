@@ -154,12 +154,15 @@ def normalize_review(raw, criteria, documents, execution, incomplete=False):
     results = []
     for criterion in criteria:
         row = by_id.get(criterion['id'], {})
+        answered = criterion['id'] in by_id
         state = row.get('state', 'no_verificable')
+        invalid_state = answered and (not isinstance(state, str) or state not in VALID_STATES)
         if not isinstance(state, str) or state not in VALID_STATES:
             state = 'no_verificable'
         citations = []
         supplied = row.get('evidence', [])
-        for evidence in supplied[:4] if isinstance(supplied, list) else []:
+        supplied = supplied if isinstance(supplied, list) else []
+        for evidence in supplied[:4]:
             if not isinstance(evidence, dict):
                 continue
             path = evidence.get('path', '')
@@ -177,6 +180,13 @@ def normalize_review(raw, criteria, documents, execution, incomplete=False):
         if not isinstance(evidence_type, str) or evidence_type not in {'codigo', 'documentacion', 'prueba_escrita', 'ejecucion', 'ninguna'}:
             evidence_type = 'ninguna'
         warnings = []
+        dropped = len(supplied) - len(citations)
+        if not answered:
+            warnings.append('El modelo no devolvió una evaluación para este criterio; se marcó como no verificable.')
+        if invalid_state:
+            warnings.append('El modelo devolvió un estado desconocido; se marcó como no verificable.')
+        if dropped:
+            warnings.append(f'{dropped} cita(s) del modelo se descartaron porque no coinciden con tus archivos.')
         if evidence_type == 'ejecucion' and not ids:
             warnings.append('No existe una ejecución registrada que respalde esta conclusión.')
             evidence_type = 'codigo' if citations else 'ninguna'
@@ -195,8 +205,18 @@ def normalize_review(raw, criteria, documents, execution, incomplete=False):
                         'explanation': str(row.get('explanation', 'No se recibió una evaluación válida para este criterio.'))[:4000],
                         'suggestion': str(row.get('suggestion', 'Revisar manualmente.'))[:3000],
                         'needs_verification': str(row.get('needs_verification', ''))[:2000],
-                        'evidence': citations, 'test_ids': ids, 'warnings': warnings})
+                        'evidence': citations, 'test_ids': ids, 'warnings': warnings,
+                        'answered': answered, 'invalid_state': invalid_state, 'citations_dropped': dropped})
     return results
+
+
+def validation_summary(results):
+    """Cuánto de lo que devolvió el modelo tuvo que corregirse o descartarse."""
+    return {'criteria': len(results),
+            'unanswered': sum(not r['answered'] for r in results),
+            'invalid_states': sum(r['invalid_state'] for r in results),
+            'citations_kept': sum(len(r['evidence']) for r in results),
+            'citations_dropped': sum(r['citations_dropped'] for r in results)}
 
 
 def review(session, criteria, allow_execution=False, baseline=False):
@@ -239,7 +259,7 @@ def review(session, criteria, allow_execution=False, baseline=False):
     value = parse_json(message)
     results = normalize_review(value, criteria, docs, session.get('execution'),
                                bool(session['submission']['warnings']))
-    return {'results': results, 'metrics': metrics(usages, started),
+    return {'results': results, 'validation': validation_summary(results), 'metrics': metrics(usages, started),
             'prompt_version': prompt_file, 'prompt_sha256': hashlib.sha256(prompt.encode()).hexdigest(),
             'criteria': criteria, 'execution': session.get('execution'),
             'submission_sha256': session['submission_sha256'],
