@@ -104,6 +104,15 @@ class HTTPTest(unittest.TestCase):
         self.assertEqual(report['validation']['invalid_states'], 1)
         self.assertEqual(report['results'][0]['state'], 'no_verificable')
 
+    def test_mode_selects_the_prompt_variant(self):
+        session = self.ingest()
+        for mode, expected in [('v2', 'review-v2.txt'), ('baseline', 'baseline-v1.txt'), ('improved', 'review-v1.txt'),
+                               ('desconocido', 'review-v1.txt')]:
+            with patch('revisor.llm.completion', return_value=({'content': '{"results":[]}'}, {})):
+                status, report = self.post('/api/review', {'session_id': session['session_id'],
+                                                         'criteria_text': 'Criterio', 'mode': mode})
+            self.assertEqual((status, report['prompt_version']), (200, expected), mode)
+
     def test_missing_api_key_returns_actionable_error(self):
         session = self.ingest()
         with patch.dict(os.environ, {'LLM_API_KEY': '', 'LLM_MODEL': ''}):

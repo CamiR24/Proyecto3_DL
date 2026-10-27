@@ -12,7 +12,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from revisor.documents import ingest_submission, plain_document, read_upload
-from revisor.llm import extract_criteria, manual_criteria, model_configured, review
+from revisor.llm import PROMPTS, extract_criteria, manual_criteria, model_configured, review
 from revisor.runner import readiness, run_checks
 
 ROOT = Path(__file__).resolve().parent
@@ -155,8 +155,9 @@ class Handler(BaseHTTPRequestHandler):
                     if path == '/api/criteria':
                         return self.send(extract_criteria(session['assignment']))
                     criteria = manual_criteria(str(data.get('criteria_text', '')))
-                    baseline = data.get('mode') == 'baseline'
-                    return self.send(review(session, criteria, data.get('allow_execution') is True, baseline))
+                    prompt_file = PROMPTS.get(data.get('mode'), PROMPTS['improved'])
+                    return self.send(review(session, criteria, data.get('allow_execution') is True,
+                                            prompt_file=prompt_file))
                 finally:
                     MODEL_LOCK.release()
             finally:

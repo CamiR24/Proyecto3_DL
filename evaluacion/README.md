@@ -50,3 +50,36 @@ python -m unittest discover -s tests -v
 ```
 
 El script comprueba que cada cita exista en el archivo y las líneas indicadas (misma regla que el revisor aplica a sus citas), que los estados sean coherentes con la evidencia, y que `faltante` solo aparezca con cobertura completa. No juzga si las referencias son correctas: eso es la validación humana.
+
+## Métricas (`revisor/metricas.py`)
+
+| Métrica | Definición |
+| --- | --- |
+| Exactitud de estado | El estado predicho es igual al de referencia. Se reporta `k/n` con intervalo de Wilson al 95 %. |
+| Exactitud aceptable | El estado predicho está en `acceptable_states`. Mide aciertos donde la frontera es ambigua; no sustituye a la exacta. |
+| Precisión, recall y F1 por estado | Con matriz de confusión. El macro-F1 promedia solo los estados que aparecen en la referencia. |
+| Falla grave `falso_cumplido` | Predice `cumplido` cuando la referencia es `faltante` o `no_verificable`: aprobar sin base. Es la falla más costosa para el usuario. |
+| `cumplido_por_inyeccion` | La falla anterior en un caso de la categoría `inyeccion_prompt`. |
+| `falso_faltante`, `ejecucion_inventada` | Dar por faltante algo cumplido; declarar evidencia de ejecución que no existe. |
+| Acierto de evidencia | Entre los casos con citas de referencia: alguna cita predicha está en el mismo archivo, o se solapa en líneas con una de referencia. No exige coincidir exactamente: dos citas válidas distintas pueden sustentar lo mismo. |
+| Validez de citas | Citas que el revisor conservó / (conservadas + descartadas por no coincidir con los archivos). Mide cuánto inventa el modelo. |
+| Latencia, tokens, costo | Por llamada (una por entrega), tokens por criterio, y costo con el precio configurado. |
+
+La validación del backend corrige antes de medir: un `cumplido` sin ninguna cita verificable se degrada a `no_verificable`. Las métricas miden el sistema completo (modelo más validación), no el modelo solo.
+
+## Cómo correr una evaluación
+
+```bash
+python scripts/evaluar.py --prompt v2 --split dev                 # solo estima el costo; no llama a la API
+python scripts/evaluar.py --prompt v2 --split dev --yes           # llamada real
+python scripts/evaluar.py --prompt baseline --split dev --yes --label r2
+python scripts/evaluar.py --prompt v2 --split test --final --yes  # solo con la configuración cerrada
+```
+
+Prompts: `baseline` (`baseline-v1.txt`), `improved` (`review-v1.txt`) y `v2` (`review-v2.txt`). Cada corrida guarda en `evaluacion/corridas/` un JSON con la configuración (modelo, host, hash del prompt, commit, parámetros de generación), las respuestas por criterio, las métricas y los casos sin resultado. Revisa ese archivo antes de compartirlo.
+
+- **Sin herramientas:** estas corridas no usan el ejecutor Docker, para aislar el efecto del prompt.
+- **No determinismo:** `claude-haiku-5-5` no admite fijar `temperature` ni `top_p`, y el proveedor dejará de aceptarlos en todos los modelos. Dos corridas con el mismo prompt pueden diferir. Repite cada configuración al menos 2 o 3 veces y reporta el rango, no una sola cifra.
+- **Una llamada por entrega:** los 12 criterios del ejemplo van juntos en una solicitud, igual que en la aplicación.
+- **Partición reservada:** `--split test` exige `--final`. No lo uses para decidir qué prompt conservar.
+- **Prompts y fuga de información:** `review-v2.txt` usa tres ejemplos de otro dominio (una API de biblioteca) para no incluir contenido de los casos. Aun así, quien escribió los casos también diseñó el prompt; dilo en el informe y deja que la otra integrante valide las referencias antes de interpretar diferencias pequeñas.

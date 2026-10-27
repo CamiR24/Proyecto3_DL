@@ -20,6 +20,12 @@ TOOL = {'type': 'function', 'function': {
         'additionalProperties': False}}}
 
 
+# Modo de la interfaz -> archivo de prompt. El baseline no tiene herramientas.
+PROMPTS = {'baseline': 'baseline-v1.txt', 'improved': 'review-v1.txt', 'v2': 'review-v2.txt'}
+NO_TOOL_PROMPTS = {'baseline-v1.txt'}
+MAX_COMPLETION_TOKENS = 6000
+
+
 def model_configured():
     return bool(os.getenv('LLM_MODEL') and os.getenv('LLM_API_KEY'))
 
@@ -30,7 +36,7 @@ def completion(messages, tools=None):
     body = {
         'model': os.environ['LLM_MODEL'],
         'messages': messages,
-        'max_completion_tokens': 6000,
+        'max_completion_tokens': MAX_COMPLETION_TOKENS,
     }
 
     if os.environ['LLM_MODEL'] == 'claude-haiku-5-5':
@@ -219,15 +225,22 @@ def validation_summary(results):
             'citations_dropped': sum(r['citations_dropped'] for r in results)}
 
 
-def review(session, criteria, allow_execution=False, baseline=False):
-    prompt_file = 'baseline-v1.txt' if baseline else 'review-v1.txt'
+def review_messages(session, criteria, prompt_file):
+    """Mensajes que se envían al modelo; también los usa el estimador de costo."""
     prompt = (ROOT / 'prompts' / prompt_file).read_text()
-    docs = session['submission']['documents']
     payload = {'assignment': session['assignment'], 'criteria': criteria,
-               'documents': context_documents(docs), 'coverage_warnings': session['submission']['warnings'],
+               'documents': context_documents(session['submission']['documents']),
+               'coverage_warnings': session['submission']['warnings'],
                'execution': session.get('execution'), 'runner_compatible': session['submission']['runner_compatible']}
-    messages = [{'role': 'system', 'content': prompt},
-                {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}]
+    return prompt, [{'role': 'system', 'content': prompt},
+                    {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}]
+
+
+def review(session, criteria, allow_execution=False, baseline=False, prompt_file=None):
+    prompt_file = prompt_file or ('baseline-v1.txt' if baseline else 'review-v1.txt')
+    baseline = baseline or prompt_file in NO_TOOL_PROMPTS
+    prompt, messages = review_messages(session, criteria, prompt_file)
+    docs = session['submission']['documents']
     started = time.monotonic()
     usages = []
     can_call = bool(allow_execution and not baseline and session['submission']['runner_compatible'])
