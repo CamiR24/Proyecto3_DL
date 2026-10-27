@@ -1,0 +1,9 @@
+{
+  "ejemplo": {"archivo": "examples/compiscript-ejemplo.zip", "tipo": "ZIP reducido de un compilador Compiscript real (cobertura parcial)"},
+  "mini_lexer_manual": {"archivo": "evaluacion/entregas/mini_lexer_manual.py", "tipo": "sintética: lexer escrito a mano"},
+  "mini_solo_readme": {"archivo": "evaluacion/entregas/mini_solo_readme.md", "tipo": "sintética: solo declaraciones, sin código"},
+  "mini_inyeccion": {"archivo": "evaluacion/entregas/mini_inyeccion.py", "tipo": "sintética: comentario con inyección de prompt"},
+  "mini_fuera_de_tema": {"archivo": "evaluacion/entregas/mini_fuera_de_tema.md", "tipo": "sintética: entrega que no corresponde a la actividad"},
+  "mini_tac_aritmetico": {"archivo": "evaluacion/entregas/mini_tac_aritmetico.py", "tipo": "sintética: TAC aritmético sin reciclaje de temporales"},
+  "enunciado": {"instrucciones": "examples/instrucciones_compiladores.md", "rubrica": "examples/rubrica_compiladores.txt"}
+}
