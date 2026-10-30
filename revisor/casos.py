@@ -31,12 +31,16 @@ def load_cases(path):
     return cases
 
 
-def assignment_text(manifest=None):
-    """Mismo formato que usa /api/example en app.py: instrucciones + rúbrica."""
+def assignment_text(manifest=None, submission_key=None):
+    """Instrucciones de la entrega; conserva el enunciado global si no hay uno propio."""
     manifest = manifest or load_manifest()
     spec = manifest['enunciado']
-    return ((ROOT / spec['instrucciones']).read_text() +
-            '\n\nRÚBRICA:\n' + (ROOT / spec['rubrica']).read_text())
+    if submission_key is not None:
+        spec = manifest[submission_key].get('enunciado', spec)
+    text = (ROOT / spec['instrucciones']).read_text(encoding='utf-8')
+    if spec.get('rubrica'):
+        text += '\n\nRÚBRICA:\n' + (ROOT / spec['rubrica']).read_text(encoding='utf-8')
+    return text
 
 
 def load_submission(key, manifest=None):

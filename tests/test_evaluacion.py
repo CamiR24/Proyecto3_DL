@@ -10,7 +10,8 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from revisor import llm
-from revisor.evaluacion import (estimate, format_estimate, group_by_submission, load_all_cases, run_evaluation,
+from revisor.casos import assignment_text
+from revisor.evaluacion import (build_session, estimate, format_estimate, group_by_submission, load_all_cases, run_evaluation,
                                 save_run)
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -145,6 +146,53 @@ class Casos(unittest.TestCase):
             bad.write_text(json.dumps(row) + '\n')
             with self.assertRaises(ValueError):
                 load_all_cases([bad], 'dev')
+
+
+class EnunciadoPorEntrega(unittest.TestCase):
+    def test_el_ejemplo_conserva_su_enunciado_original(self):
+        cases, manifest, cache = load_all_cases(CASES, 'dev', {'M01'})
+        session = build_session('ejemplo', manifest, cache)
+        self.assertEqual(session['assignment'], assignment_text(manifest))
+        self.assertIn('RÚBRICA:', session['assignment'])
+
+    def test_camila_recibe_el_enunciado_de_componentes_sin_rubrica_global(self):
+        paths = [ROOT / 'evaluacion/casos_camila.jsonl']
+        cases, manifest, cache = load_all_cases(paths, 'dev', {'C01'})
+        session = build_session(cases[0]['submission'], manifest, cache)
+        expected = (ROOT / 'evaluacion/instrucciones_componentes.txt').read_text(encoding='utf-8')
+        self.assertEqual(session['assignment'], expected)
+        self.assertNotIn('incumplir resta cinco puntos', session['assignment'])
+
+    def test_enunciado_propio_puede_incluir_rubrica(self):
+        with tempfile.TemporaryDirectory() as folder:
+            instructions = Path(folder) / 'instrucciones.txt'
+            rubric = Path(folder) / 'rubrica.txt'
+            instructions.write_text('Actividad específica', encoding='utf-8')
+            rubric.write_text('Criterios específicos', encoding='utf-8')
+            manifest = {'enunciado': {}, 'entrega': {'enunciado': {
+                'instrucciones': str(instructions), 'rubrica': str(rubric)}}}
+            self.assertEqual(assignment_text(manifest, 'entrega'),
+                             'Actividad específica\n\nRÚBRICA:\nCriterios específicos')
+
+    def test_corrida_envia_contexto_propio_sin_referencias_y_guarda_hash(self):
+        paths = [ROOT / 'evaluacion/casos_camila.jsonl']
+        cases, manifest, cache = load_all_cases(paths, 'dev', {'C01'})
+        captured = {}
+
+        def completion(messages, tools=None):
+            payload = json.loads(messages[1]['content'])
+            captured.update(payload)
+            self.assertIn('componentes aislados', payload['assignment'])
+            self.assertNotIn('reference_state', messages[1]['content'])
+            self.assertNotIn('acceptable_states', messages[1]['content'])
+            self.assertNotIn('rationale', messages[1]['content'])
+            return {'content': json.dumps({'results': [perfect(cases[0], payload['criteria'][0])]})}, {}
+
+        with patch.dict(os.environ, ENV), patch('revisor.llm.completion', side_effect=completion):
+            run = run_evaluation(cases, manifest, cache, 'review-v2.txt', 'dev')
+        self.assertEqual(run['quality']['exact']['k'], 1)
+        self.assertEqual(len(run['groups'][0]['assignment_sha256']), 64)
+        self.assertEqual(captured['criteria'][0]['text'], cases[0]['criterion']['text'])
 
 
 class ScriptDeLinea(unittest.TestCase):

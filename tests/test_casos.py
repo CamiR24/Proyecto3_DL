@@ -28,8 +28,18 @@ class CasosEvaluacion(unittest.TestCase):
         found = {c['category'] for c in self.cases}
         self.assertTrue({'tipico', 'dificil', 'informacion_insuficiente', 'fuera_de_alcance', 'inyeccion_prompt'} <= found)
 
-    def test_las_referencias_no_se_presentan_como_validadas(self):
-        self.assertFalse(any(c['human_validated'] for c in self.cases))
+    def test_la_validacion_humana_tiene_identidad_coherente(self):
+        # Permite avanzar la revisión humana sin que una prueba exija false para siempre.
+        for path in sorted((ROOT / 'evaluacion').glob('casos_*.jsonl')):
+            for case in load_cases(path):
+                self.assertIs(type(case['human_validated']), bool, case['id'])
+                if case['human_validated']:
+                    reviewer = case['validated_by']
+                    self.assertIsInstance(reviewer, str, case['id'])
+                    self.assertTrue(reviewer.strip(), case['id'])
+                    self.assertNotEqual(reviewer.strip().casefold(), case['author'].strip().casefold(), case['id'])
+                else:
+                    self.assertIsNone(case['validated_by'], case['id'])
 
     def test_detecta_cita_inexistente(self):
         case = copy.deepcopy(self.cases[0])

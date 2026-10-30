@@ -57,7 +57,7 @@ def build_session(key, manifest, cache):
     if key not in cache:
         cache[key] = load_submission(key, manifest)
     submission = cache[key]
-    return {'assignment': assignment_text(manifest), 'submission_sha256': submission['sha256'],
+    return {'assignment': assignment_text(manifest, key), 'submission_sha256': submission['sha256'],
             'submission': {k: submission[k] for k in ('documents', 'warnings', 'runner_compatible', 'runner_files')}}
 
 
@@ -129,7 +129,8 @@ def run_evaluation(cases, manifest, cache, prompt_file, split, label=''):
             entry['error'] = str(exc)
         else:
             entry.update(results=report['results'], metrics=report['metrics'], validation=report['validation'],
-                         coverage=report['coverage'], submission_sha256=report['submission_sha256'])
+                         coverage=report['coverage'], submission_sha256=report['submission_sha256'],
+                         assignment_sha256=report['assignment_sha256'])
             scores += [score_case(case, result) for case, result in zip(group, report['results'])]
         groups.append(entry)
     return {'config': config, 'groups': groups, 'scores': scores, 'quality': aggregate(scores) if scores else None,

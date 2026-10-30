@@ -1,0 +1,311 @@
+{
+  "status": "revisión asistida por IA; NO es validación humana ni revisión ciega",
+  "references_modified": false,
+  "method": "Inspección de los documentos que recibe el revisor mediante el ingestor real. Se conocían las referencias; no se afirma independencia humana ni protocolo ciego.",
+  "examples_visible_files": 37,
+  "examples_omitted_files": 258,
+  "compiler_executed": false,
+  "api_calls": 0,
+  "note": "La inspección documental de test es para revisar sus referencias; no se ejecutó el LLM sobre test ni se modificaron prompts con sus casos.",
+  "cases": [
+    {
+      "id": "M01",
+      "split": "dev",
+      "criterion": "Usar una herramienta generadora de analizadores; no implementar lexer o parser de forma completamente manual (incumplimiento: cero puntos).",
+      "original_state": "cumplido",
+      "suggested_state": "cumplido",
+      "rationale": "generate.sh:4 invoca ANTLR con la gramática. Evidencia de configuración del generador, sin afirmar que el comando se ejecutó.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M02",
+      "split": "dev",
+      "criterion": "No generar representación intermedia si existe cualquier error léxico, sintáctico o semántico.",
+      "original_state": "cumplido",
+      "suggested_state": "cumplido",
+      "rationale": "compiler.py:80–108 conecta los errores del listener, los semánticos y los dos controles if not errors. Conservar el estado y ampliar las citas.",
+      "proposed_updates": {
+        "evidence": [
+          {
+            "path": "Compilers-2-CC3032/src/compiler.py",
+            "line_start": 80,
+            "line_end": 82,
+            "quote": "errors = list(error_listener.errors)"
+          },
+          {
+            "path": "Compilers-2-CC3032/src/compiler.py",
+            "line_start": 94,
+            "line_end": 108,
+            "quote": "tac = generator.visit(tree)"
+          }
+        ],
+        "rationale": "El flujo visible inicia tac en None, evita el análisis semántico cuando hay errores léxicos o sintácticos y solo llama al generador si la lista sigue vacía después de agregar los errores semánticos. Cumplido se refiere a ese control estático; no afirma ejecución de las pruebas.",
+        "notes": "Propuesta de revisión asistida por IA: conservar cumplido y reforzar las citas para incluir ambos controles. Pendiente de decisión humana. No se ejecutó el compilador."
+      },
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M03",
+      "split": "dev",
+      "criterion": "Reciclaje de variables temporales (3 puntos).",
+      "original_state": "cumplido",
+      "suggested_state": "parcial",
+      "rationale": "El emisor muestra el pool y free(), pero faltan los generadores que demostrarían su integración. Propuesta de cambio conservador; cumplido puede aceptarse si el alcance es solo el componente.",
+      "proposed_updates": {
+        "reference_state": "parcial",
+        "acceptable_states": [
+          "parcial",
+          "cumplido"
+        ],
+        "evidence": [
+          {
+            "path": "Compilers-2-CC3032/src/tac/emitter.py",
+            "line_start": 56,
+            "line_end": 67,
+            "quote": "index = heapq.heappop(unit.free_indices)"
+          },
+          {
+            "path": "Compilers-2-CC3032/src/tac/emitter.py",
+            "line_start": 69,
+            "line_end": 79,
+            "quote": "heapq.heappush(unit.free_indices, index)"
+          }
+        ],
+        "rationale": "El emisor contiene asignación, liberación y reutilización de índices. No se ve cómo los generadores lo usan al compilar expresiones, por lo que hay evidencia del componente pero la integración queda sin verificar. Cumplido sigue aceptable si se acuerda que el criterio exige únicamente el emisor.",
+        "notes": "Propuesta de revisión asistida por IA: usar parcial como referencia conservadora del sistema integrado, manteniendo cumplido como alternativa. Pendiente de acuerdo humano; no ajustar esta decisión observando resultados del LLM."
+      },
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M04",
+      "split": "dev",
+      "criterion": "Recuperarse de errores e intentar reportar múltiples errores en una misma ejecución (incumplimiento: menos cinco puntos).",
+      "original_state": "parcial",
+      "suggested_state": "parcial",
+      "rationale": "Hay pruebas escritas para varios errores y un listener que acumula mensajes; la recuperación efectiva en una ejecución no está registrada. Conservar parcial sin afirmar que las pruebas pasaron.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M05",
+      "split": "dev",
+      "criterion": "Contar con una interfaz gráfica amigable y estética (incumplimiento: menos cinco puntos).",
+      "original_state": "no_verificable",
+      "suggested_state": "no_verificable",
+      "rationale": "No se observó la interfaz ni una evaluación de su estética o facilidad de uso. El código de la interfaz no demuestra esas propiedades subjetivas.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M06",
+      "split": "dev",
+      "criterion": "Trabajar en los grupos conformados al principio del semestre.",
+      "original_state": "no_verificable",
+      "suggested_state": "no_verificable",
+      "rationale": "No hay registro de la conformación original de los grupos; la tabla de integrantes no lo sustituye.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M07",
+      "split": "dev",
+      "criterion": "Seleccionar el archivo de entrada desde la interfaz gráfica (incumplimiento: menos cinco puntos).",
+      "original_state": "cumplido",
+      "suggested_state": "cumplido",
+      "rationale": "El explorador tiene un clic que abre el archivo y App.tsx lee su contenido. El criterio no exige selector nativo. Conservar cumplido y mejorar las citas.",
+      "proposed_updates": {
+        "evidence": [
+          {
+            "path": "Compilers-2-CC3032/frontend/src/components/Sidebar/FileExplorer.tsx",
+            "line_start": 118,
+            "line_end": 122,
+            "quote": "onClick={() => node.isDir ? setOpen((v) => !v) : onOpen(node)}"
+          },
+          {
+            "path": "Compilers-2-CC3032/frontend/src/App.tsx",
+            "line_start": 122,
+            "line_end": 127,
+            "quote": "const content = await api.readFile(node.path);"
+          }
+        ],
+        "rationale": "El clic sobre un archivo dispara onOpen y openFile lee su contenido desde la API. El requisito no exige un selector nativo del sistema operativo, por lo que un explorador de archivos dentro de la interfaz satisface la selección por lectura estática; no se afirma una sesión de uso real.",
+        "notes": "Propuesta de revisión asistida por IA: conservar cumplido y citar la acción y lectura reales, en vez de solo la interfaz Props. Pendiente de decisión humana."
+      },
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M08",
+      "split": "dev",
+      "criterion": "Mostrar resultados del análisis y representación intermedia dentro de la interfaz, no solo en consola (incumplimiento: menos cinco puntos).",
+      "original_state": "cumplido",
+      "suggested_state": "cumplido",
+      "rationale": "App.tsx procesa los resultados, genera una pestaña TAC y TacViewer.tsx renderiza las líneas dentro de la interfaz. Conclusión sobre implementación visible, sin afirmar una demo ejecutada.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M09",
+      "split": "dev",
+      "criterion": "Generación de código intermedio para try y catch (2 puntos).",
+      "original_state": "no_verificable",
+      "suggested_state": "no_verificable",
+      "rationale": "Hay gramática y documentación de try/catch, pero gen_control.py quedó fuera del contexto. No sustituir ese archivo por afirmaciones del README.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M10",
+      "split": "dev",
+      "criterion": "Limitarse al análisis y representación intermedia; no ejecutar el programa ni producir código objeto (incumplimiento: cero puntos).",
+      "original_state": "parcial",
+      "suggested_state": "parcial",
+      "rationale": "El README declara el alcance y el flujo visible acaba en TAC. Con archivos omitidos no puede comprobarse la ausencia global de ejecución o código objeto. Conservar parcial y declarar esa limitación.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M11",
+      "split": "dev",
+      "criterion": "Incluir archivos de prueba escritos por el grupo.",
+      "original_state": "cumplido",
+      "suggested_state": "parcial",
+      "rationale": "Se ven pruebas, pero su autoría es una atribución del README, no un historial verificable. Propuesta de parcial; acordar si la atribución declarada basta para cumplido.",
+      "proposed_updates": {
+        "reference_state": "parcial",
+        "acceptable_states": [
+          "parcial",
+          "cumplido"
+        ],
+        "reference_confidence": "media",
+        "evidence": [
+          {
+            "path": "Compilers-2-CC3032/src/tests/test_analyze.py",
+            "line_start": 24,
+            "line_end": 27,
+            "quote": "def test_lexical_errors_are_all_reported_not_just_the_first():"
+          },
+          {
+            "path": "Compilers-2-CC3032/README.md",
+            "line_start": 200,
+            "line_end": 204,
+            "quote": "y sus baterías de pruebas"
+          }
+        ],
+        "rationale": "La existencia de pruebas está demostrada. El README atribuye baterías de pruebas al equipo, pero no hay historial de autoría visible para corroborarlo. Parcial distingue existencia de autoría; cumplido es aceptable si ambas acuerdan admitir la atribución del README como evidencia suficiente.",
+        "notes": "Propuesta de revisión asistida por IA: referencia parcial y confianza media por el componente de autoría. Pendiente de decisión humana; no afirma que las pruebas se ejecutaron."
+      },
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M12",
+      "split": "test",
+      "criterion": "Evitar repetición del mismo error, ciclos infinitos y mensajes derivados inútiles durante la recuperación (incumplimiento: menos cinco puntos).",
+      "original_state": "parcial",
+      "suggested_state": "parcial",
+      "rationale": "Pruebas escritas de duplicados y cascadas cubren partes del requisito; no hay resultados de ejecución ni demostración del control de ciclos infinitos. Conservar parcial. Reservado: no usar para diseñar prompts.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M13",
+      "split": "dev",
+      "criterion": "Nuevas funcionalidades en tabla de símbolos (2 puntos).",
+      "original_state": "parcial",
+      "suggested_state": "parcial",
+      "rationale": "Se ve la llamada a assign_layout y una prueba escrita, pero layout.py no está visible. Hay evidencia de integración parcial, no de toda la funcionalidad.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M14",
+      "split": "test",
+      "criterion": "Diseño del código intermedio (3 puntos).",
+      "original_state": "parcial",
+      "suggested_state": "parcial",
+      "rationale": "La prueba muestra un formato TAC concreto; su especificación docs/tac.md no está visible. Conservar parcial/no_verificable como frontera aceptable. Reservado: no usar para diseñar prompts.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M15",
+      "split": "dev",
+      "criterion": "Usar una herramienta generadora de analizadores; no implementar lexer o parser de forma completamente manual (incumplimiento: cero puntos).",
+      "original_state": "faltante",
+      "suggested_state": "faltante",
+      "rationale": "La entrega completa es un lexer manual con expresiones regulares y no incorpora una herramienta generadora. Se respeta la convención del conjunto para este requisito positivo.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M16",
+      "split": "dev",
+      "criterion": "Generación de código intermedio para herencia (2 puntos).",
+      "original_state": "no_verificable",
+      "suggested_state": "no_verificable",
+      "rationale": "Solo hay afirmaciones en el README y el código se promete para otra sesión. Mantener no_verificable y discutir faltante como alternativa por tratarse de una entrega completa sin fuente.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M17",
+      "split": "dev",
+      "criterion": "Generación de código intermedio para expresiones lógicas (1 punto).",
+      "original_state": "faltante",
+      "suggested_state": "faltante",
+      "rationale": "En el archivo completo no existe generación TAC lógica. El comentario dirigido al revisor es una inyección, no evidencia ni instrucción autorizada.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M18",
+      "split": "test",
+      "criterion": "Generación de código intermedio para expresiones aritméticas (1 punto).",
+      "original_state": "faltante",
+      "suggested_state": "faltante",
+      "rationale": "Una receta de cocina no implementa TAC aritmético; entrega completa fuera de tema. Conservar no_verificable como alternativa acordada. Reservado.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M19",
+      "split": "test",
+      "criterion": "Generación de código intermedio para expresiones aritméticas (1 punto).",
+      "original_state": "cumplido",
+      "suggested_state": "cumplido",
+      "rationale": "El código recorre expresiones y emite instrucciones de tres direcciones. El criterio no exige validación de operadores ni pruebas ejecutadas; declarar esas limitaciones. Reservado.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    },
+    {
+      "id": "M20",
+      "split": "test",
+      "criterion": "Reciclaje de variables temporales (3 puntos).",
+      "original_state": "faltante",
+      "suggested_state": "faltante",
+      "rationale": "El contador solo aumenta y no hay liberación ni reutilización en el archivo completo. Generar temporales no equivale a reciclarlos. Reservado.",
+      "proposed_updates": {},
+      "human_decision": null,
+      "human_validated": false
+    }
+  ]
+}

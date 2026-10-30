@@ -1,0 +1,121 @@
+REVISIÓN RÁPIDA — PROYECTO 3
+
+RESULTADO
+- Los 40 casos pasan scripts/validar_casos.py.
+- Las 64 pruebas originales pasaron antes de cambiar código.
+- Las 68 pruebas finales pasaron: las 64 anteriores y cuatro de enunciado por entrega.
+- Se ejecutó una estimación dev de Camila sin --yes: 15 entregas, sin llamada a la API.
+- No se ejecutó el compilador de ejemplo ni Docker.
+- No se leyó ni se copió .env, .git, .venv, node_modules ni cachés al paquete.
+
+CAMBIOS QUE APLICA EL INSTALADOR
+1. revisor/casos.py: permite un enunciado por entrega; conserva el global si no hay otro.
+2. evaluacion/submissions.json: las 20 entregas de Camila apuntan a instrucciones de
+   componentes aislados. No reciben los requisitos generales del compilador completo.
+3. revisor/evaluacion.py: usa esas instrucciones y conserva su hash en la corrida.
+4. tests/test_evaluacion.py: cuatro pruebas de compatibilidad, envío real del contexto
+   mediante un modelo simulado, ausencia de referencias en el payload y hash guardado.
+5. tests/test_casos.py: ya no exige que todas las referencias sean false para siempre;
+   comprueba coherencia entre human_validated y validated_by, también para Camila.
+6. Se agregan las instrucciones y esta revisión asistida.
+
+REFERENCIAS: NO SE MODIFICARON LOS JSONL
+M03 y M11: se propone parcial en lugar de cumplido; ambas alternativas ya estaban
+aceptadas. La decisión cambia la exactitud estricta de futuras comparaciones, por
+lo que debe acordarse antes de interpretar resultados, nunca para favorecer un prompt.
+M02 y M07: se conserva cumplido y se proponen citas más directas.
+Las propuestas exactas están en evaluacion/revision_asistida_marines.json.
+Todos los casos siguen human_validated=false y validated_by=null. No se falsificó
+una validación de Camila o Marinés. Esta revisión asistida ya conoce las referencias;
+no debe describirse como una revisión humana independiente y ciega.
+
+REVISIÓN DE LOS 20 CASOS DE MARINÉS
+
+M01 (dev): cumplido -> propuesta cumplido
+generate.sh:4 invoca ANTLR con la gramática. Evidencia de configuración del generador, sin afirmar que el comando se ejecutó.
+
+M02 (dev): cumplido -> propuesta cumplido
+compiler.py:80–108 conecta los errores del listener, los semánticos y los dos controles if not errors. Conservar el estado y ampliar las citas.
+
+M03 (dev): cumplido -> propuesta parcial
+El emisor muestra el pool y free(), pero faltan los generadores que demostrarían su integración. Propuesta de cambio conservador; cumplido puede aceptarse si el alcance es solo el componente.
+
+M04 (dev): parcial -> propuesta parcial
+Hay pruebas escritas para varios errores y un listener que acumula mensajes; la recuperación efectiva en una ejecución no está registrada. Conservar parcial sin afirmar que las pruebas pasaron.
+
+M05 (dev): no_verificable -> propuesta no_verificable
+No se observó la interfaz ni una evaluación de su estética o facilidad de uso. El código de la interfaz no demuestra esas propiedades subjetivas.
+
+M06 (dev): no_verificable -> propuesta no_verificable
+No hay registro de la conformación original de los grupos; la tabla de integrantes no lo sustituye.
+
+M07 (dev): cumplido -> propuesta cumplido
+El explorador tiene un clic que abre el archivo y App.tsx lee su contenido. El criterio no exige selector nativo. Conservar cumplido y mejorar las citas.
+
+M08 (dev): cumplido -> propuesta cumplido
+App.tsx procesa los resultados, genera una pestaña TAC y TacViewer.tsx renderiza las líneas dentro de la interfaz. Conclusión sobre implementación visible, sin afirmar una demo ejecutada.
+
+M09 (dev): no_verificable -> propuesta no_verificable
+Hay gramática y documentación de try/catch, pero gen_control.py quedó fuera del contexto. No sustituir ese archivo por afirmaciones del README.
+
+M10 (dev): parcial -> propuesta parcial
+El README declara el alcance y el flujo visible acaba en TAC. Con archivos omitidos no puede comprobarse la ausencia global de ejecución o código objeto. Conservar parcial y declarar esa limitación.
+
+M11 (dev): cumplido -> propuesta parcial
+Se ven pruebas, pero su autoría es una atribución del README, no un historial verificable. Propuesta de parcial; acordar si la atribución declarada basta para cumplido.
+
+M12 (test): parcial -> propuesta parcial
+Pruebas escritas de duplicados y cascadas cubren partes del requisito; no hay resultados de ejecución ni demostración del control de ciclos infinitos. Conservar parcial. Reservado: no usar para diseñar prompts.
+
+M13 (dev): parcial -> propuesta parcial
+Se ve la llamada a assign_layout y una prueba escrita, pero layout.py no está visible. Hay evidencia de integración parcial, no de toda la funcionalidad.
+
+M14 (test): parcial -> propuesta parcial
+La prueba muestra un formato TAC concreto; su especificación docs/tac.md no está visible. Conservar parcial/no_verificable como frontera aceptable. Reservado: no usar para diseñar prompts.
+
+M15 (dev): faltante -> propuesta faltante
+La entrega completa es un lexer manual con expresiones regulares y no incorpora una herramienta generadora. Se respeta la convención del conjunto para este requisito positivo.
+
+M16 (dev): no_verificable -> propuesta no_verificable
+Solo hay afirmaciones en el README y el código se promete para otra sesión. Mantener no_verificable y discutir faltante como alternativa por tratarse de una entrega completa sin fuente.
+
+M17 (dev): faltante -> propuesta faltante
+En el archivo completo no existe generación TAC lógica. El comentario dirigido al revisor es una inyección, no evidencia ni instrucción autorizada.
+
+M18 (test): faltante -> propuesta faltante
+Una receta de cocina no implementa TAC aritmético; entrega completa fuera de tema. Conservar no_verificable como alternativa acordada. Reservado.
+
+M19 (test): cumplido -> propuesta cumplido
+El código recorre expresiones y emite instrucciones de tres direcciones. El criterio no exige validación de operadores ni pruebas ejecutadas; declarar esas limitaciones. Reservado.
+
+M20 (test): faltante -> propuesta faltante
+El contador solo aumenta y no hay liberación ni reutilización en el archivo completo. Generar temporales no equivale a reciclarlos. Reservado.
+
+
+PENDIENTES CONCRETOS
+1. Revisar las decisiones propuestas, especialmente M03 y M11. Las modificaciones
+   documentales para test no se usan para ajustar el prompt. No ejecutar test aún.
+2. Camila confirma su revisión de Marinés y Marinés revisa los casos de Camila;
+   solo entonces completar los campos de validación con la identidad real.
+3. Comparar baseline y v2 en dev de Camila, con idéntico modelo/configuración y al
+   menos dos repeticiones si el presupuesto lo permite. Esas llamadas sí consumen.
+4. Realizar la prueba Docker y guardar resultados reales. No afirmar que ya pasó.
+5. Documentar la sesión de uso con un compañero y los cambios motivados por ella.
+
+CORRIDAS EXISTENTES
+Las corridas adjuntas son de dev de Marinés, no de Camila. Dos de v2 solo tienen
+resultados para 3/15 casos y 12 errores; no comparar sus porcentajes con corridas
+completas. Las completas tienen baseline 10/15 en tres corridas, v1 12/15, 9/15,
+10/15, y v2 12/15, 12/15, 11/15. Estos son datos históricos con referencias sin
+validar y no demuestran una mejora definitiva. Si cambian las referencias, debe
+recalcularse la puntuación de las respuestas históricas y registrar ese cambio;
+no editar sus archivos originales para fingir que se usaron las referencias nuevas.
+No se verificaron las tarifas de los precios predeterminados: cualquier cifra en
+dólares del estimador depende de esa configuración y no es una factura.
+
+LIMITACIONES
+Los 20 casos de Camila son sintéticos, pequeños y preparados con asistencia de IA.
+M18–M20 y C16–C20 siguen reservados, igual que los demás casos test. No se ajustaron
+prompts. Los intervalos estadísticos con tan pocos casos y entregas compartidas
+deben interpretarse con cautela. Las comprobaciones locales prueban coherencia del
+software, no calidad de respuestas reales del LLM.

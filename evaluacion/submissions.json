@@ -28,63 +28,143 @@
     "rubrica": "examples/rubrica_compiladores.txt"
   },
   "camila_01_aritmetica": {
-    "archivo": "evaluacion/entregas_camila/camila_01_aritmetica.py"
+    "archivo": "evaluacion/entregas_camila/camila_01_aritmetica.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_02_aritmetica_incompleta": {
-    "archivo": "evaluacion/entregas_camila/camila_02_aritmetica_incompleta.py"
+    "archivo": "evaluacion/entregas_camila/camila_02_aritmetica_incompleta.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_03_asignacion_sin_control": {
-    "archivo": "evaluacion/entregas_camila/camila_03_asignacion_sin_control.py"
+    "archivo": "evaluacion/entregas_camila/camila_03_asignacion_sin_control.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_04_declaracion_duplicada": {
-    "archivo": "evaluacion/entregas_camila/camila_04_declaracion_duplicada.py"
+    "archivo": "evaluacion/entregas_camila/camila_04_declaracion_duplicada.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_05_ambitos_sin_padre": {
-    "archivo": "evaluacion/entregas_camila/camila_05_ambitos_sin_padre.py"
+    "archivo": "evaluacion/entregas_camila/camila_05_ambitos_sin_padre.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_06_tipos_incompletos": {
-    "archivo": "evaluacion/entregas_camila/camila_06_tipos_incompletos.py"
+    "archivo": "evaluacion/entregas_camila/camila_06_tipos_incompletos.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_07_logica_sin_cortocircuito": {
-    "archivo": "evaluacion/entregas_camila/camila_07_logica_sin_cortocircuito.py"
+    "archivo": "evaluacion/entregas_camila/camila_07_logica_sin_cortocircuito.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_08_error_ubicacion": {
-    "archivo": "evaluacion/entregas_camila/camila_08_error_ubicacion.py"
+    "archivo": "evaluacion/entregas_camila/camila_08_error_ubicacion.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_09_prueba_sin_resultado": {
-    "archivo": "evaluacion/entregas_camila/camila_09_prueba_sin_resultado.py"
+    "archivo": "evaluacion/entregas_camila/camila_09_prueba_sin_resultado.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_10_usabilidad": {
-    "archivo": "evaluacion/entregas_camila/camila_10_usabilidad.py"
+    "archivo": "evaluacion/entregas_camila/camila_10_usabilidad.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_11_comparacion_tiempo": {
-    "archivo": "evaluacion/entregas_camila/camila_11_comparacion_tiempo.py"
+    "archivo": "evaluacion/entregas_camila/camila_11_comparacion_tiempo.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_12_inyeccion_metadatos": {
-    "archivo": "evaluacion/entregas_camila/camila_12_inyeccion_metadatos.py"
+    "archivo": "evaluacion/entregas_camila/camila_12_inyeccion_metadatos.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_13_inyeccion_cita": {
-    "archivo": "evaluacion/entregas_camila/camila_13_inyeccion_cita.py"
+    "archivo": "evaluacion/entregas_camila/camila_13_inyeccion_cita.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_14_fuera_tema_inventario": {
-    "archivo": "evaluacion/entregas_camila/camila_14_fuera_tema_inventario.py"
+    "archivo": "evaluacion/entregas_camila/camila_14_fuera_tema_inventario.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_15_solo_imprime_errores": {
-    "archivo": "evaluacion/entregas_camila/camila_15_solo_imprime_errores.py"
+    "archivo": "evaluacion/entregas_camila/camila_15_solo_imprime_errores.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_16_etiquetas_unicas": {
-    "archivo": "evaluacion/entregas_camila/camila_16_etiquetas_unicas.py"
+    "archivo": "evaluacion/entregas_camila/camila_16_etiquetas_unicas.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_17_retorno_sin_comprobar": {
-    "archivo": "evaluacion/entregas_camila/camila_17_retorno_sin_comprobar.py"
+    "archivo": "evaluacion/entregas_camila/camila_17_retorno_sin_comprobar.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_18_grupo_original": {
-    "archivo": "evaluacion/entregas_camila/camila_18_grupo_original.py"
+    "archivo": "evaluacion/entregas_camila/camila_18_grupo_original.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_19_inyeccion_excepciones": {
-    "archivo": "evaluacion/entregas_camila/camila_19_inyeccion_excepciones.py"
+    "archivo": "evaluacion/entregas_camila/camila_19_inyeccion_excepciones.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   },
   "camila_20_fuera_tema_promedio": {
-    "archivo": "evaluacion/entregas_camila/camila_20_fuera_tema_promedio.py"
+    "archivo": "evaluacion/entregas_camila/camila_20_fuera_tema_promedio.py",
+    "tipo": "sintética: componente aislado, creado con asistencia de IA; referencia pendiente de revisión humana",
+    "enunciado": {
+      "instrucciones": "evaluacion/instrucciones_componentes.txt"
+    }
   }
 }
