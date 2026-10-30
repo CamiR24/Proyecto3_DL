@@ -1,9 +1,90 @@
 {
-  "ejemplo": {"archivo": "examples/compiscript-ejemplo.zip", "tipo": "ZIP reducido de un compilador Compiscript real (cobertura parcial)"},
-  "mini_lexer_manual": {"archivo": "evaluacion/entregas/mini_lexer_manual.py", "tipo": "sintética: lexer escrito a mano"},
-  "mini_solo_readme": {"archivo": "evaluacion/entregas/mini_solo_readme.md", "tipo": "sintética: solo declaraciones, sin código"},
-  "mini_inyeccion": {"archivo": "evaluacion/entregas/mini_inyeccion.py", "tipo": "sintética: comentario con inyección de prompt"},
-  "mini_fuera_de_tema": {"archivo": "evaluacion/entregas/mini_fuera_de_tema.md", "tipo": "sintética: entrega que no corresponde a la actividad"},
-  "mini_tac_aritmetico": {"archivo": "evaluacion/entregas/mini_tac_aritmetico.py", "tipo": "sintética: TAC aritmético sin reciclaje de temporales"},
-  "enunciado": {"instrucciones": "examples/instrucciones_compiladores.md", "rubrica": "examples/rubrica_compiladores.txt"}
+  "ejemplo": {
+    "archivo": "examples/compiscript-ejemplo.zip",
+    "tipo": "ZIP reducido de un compilador Compiscript real (cobertura parcial)"
+  },
+  "mini_lexer_manual": {
+    "archivo": "evaluacion/entregas/mini_lexer_manual.py",
+    "tipo": "sintética: lexer escrito a mano"
+  },
+  "mini_solo_readme": {
+    "archivo": "evaluacion/entregas/mini_solo_readme.md",
+    "tipo": "sintética: solo declaraciones, sin código"
+  },
+  "mini_inyeccion": {
+    "archivo": "evaluacion/entregas/mini_inyeccion.py",
+    "tipo": "sintética: comentario con inyección de prompt"
+  },
+  "mini_fuera_de_tema": {
+    "archivo": "evaluacion/entregas/mini_fuera_de_tema.md",
+    "tipo": "sintética: entrega que no corresponde a la actividad"
+  },
+  "mini_tac_aritmetico": {
+    "archivo": "evaluacion/entregas/mini_tac_aritmetico.py",
+    "tipo": "sintética: TAC aritmético sin reciclaje de temporales"
+  },
+  "enunciado": {
+    "instrucciones": "examples/instrucciones_compiladores.md",
+    "rubrica": "examples/rubrica_compiladores.txt"
+  },
+  "camila_01_aritmetica": {
+    "archivo": "evaluacion/entregas_camila/camila_01_aritmetica.py"
+  },
+  "camila_02_aritmetica_incompleta": {
+    "archivo": "evaluacion/entregas_camila/camila_02_aritmetica_incompleta.py"
+  },
+  "camila_03_asignacion_sin_control": {
+    "archivo": "evaluacion/entregas_camila/camila_03_asignacion_sin_control.py"
+  },
+  "camila_04_declaracion_duplicada": {
+    "archivo": "evaluacion/entregas_camila/camila_04_declaracion_duplicada.py"
+  },
+  "camila_05_ambitos_sin_padre": {
+    "archivo": "evaluacion/entregas_camila/camila_05_ambitos_sin_padre.py"
+  },
+  "camila_06_tipos_incompletos": {
+    "archivo": "evaluacion/entregas_camila/camila_06_tipos_incompletos.py"
+  },
+  "camila_07_logica_sin_cortocircuito": {
+    "archivo": "evaluacion/entregas_camila/camila_07_logica_sin_cortocircuito.py"
+  },
+  "camila_08_error_ubicacion": {
+    "archivo": "evaluacion/entregas_camila/camila_08_error_ubicacion.py"
+  },
+  "camila_09_prueba_sin_resultado": {
+    "archivo": "evaluacion/entregas_camila/camila_09_prueba_sin_resultado.py"
+  },
+  "camila_10_usabilidad": {
+    "archivo": "evaluacion/entregas_camila/camila_10_usabilidad.py"
+  },
+  "camila_11_comparacion_tiempo": {
+    "archivo": "evaluacion/entregas_camila/camila_11_comparacion_tiempo.py"
+  },
+  "camila_12_inyeccion_metadatos": {
+    "archivo": "evaluacion/entregas_camila/camila_12_inyeccion_metadatos.py"
+  },
+  "camila_13_inyeccion_cita": {
+    "archivo": "evaluacion/entregas_camila/camila_13_inyeccion_cita.py"
+  },
+  "camila_14_fuera_tema_inventario": {
+    "archivo": "evaluacion/entregas_camila/camila_14_fuera_tema_inventario.py"
+  },
+  "camila_15_solo_imprime_errores": {
+    "archivo": "evaluacion/entregas_camila/camila_15_solo_imprime_errores.py"
+  },
+  "camila_16_etiquetas_unicas": {
+    "archivo": "evaluacion/entregas_camila/camila_16_etiquetas_unicas.py"
+  },
+  "camila_17_retorno_sin_comprobar": {
+    "archivo": "evaluacion/entregas_camila/camila_17_retorno_sin_comprobar.py"
+  },
+  "camila_18_grupo_original": {
+    "archivo": "evaluacion/entregas_camila/camila_18_grupo_original.py"
+  },
+  "camila_19_inyeccion_excepciones": {
+    "archivo": "evaluacion/entregas_camila/camila_19_inyeccion_excepciones.py"
+  },
+  "camila_20_fuera_tema_promedio": {
+    "archivo": "evaluacion/entregas_camila/camila_20_fuera_tema_promedio.py"
+  }
 }
