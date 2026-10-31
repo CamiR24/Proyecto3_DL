@@ -1,0 +1,69 @@
+{
+  "status": "completed",
+  "executed": true,
+  "cases": [
+    {
+      "id": "valid_tac",
+      "passed": true,
+      "input": "function f(a: integer): integer { return a + 1; }\nprint(f(1));\n",
+      "errors": [],
+      "tac_present": true,
+      "tac_preview": [
+        "func f(a):",
+        "    $t1 = a + 1",
+        "    return $t1",
+        "endfunc",
+        "func __main():",
+        "    param 1",
+        "    $t1 = call f, 1",
+        "    print $t1",
+        "endfunc"
+      ]
+    },
+    {
+      "id": "lexical_blocks_tac",
+      "passed": true,
+      "input": "let a@ = 1;\n",
+      "errors": [
+        "Error léxico en línea 1, columna 5: carácter o secuencia no reconocida '@'."
+      ],
+      "tac_present": false,
+      "tac_preview": []
+    },
+    {
+      "id": "syntax_blocks_tac",
+      "passed": true,
+      "input": "let a: integer = ;\n",
+      "errors": [
+        "Error sintáctico en línea 1, columna 17: se encontró ';', pero se esperaba '(', '-', '!', 'null', 'true' o 'false', entre otros."
+      ],
+      "tac_present": false,
+      "tac_preview": []
+    },
+    {
+      "id": "semantic_blocks_tac",
+      "passed": true,
+      "input": "let x: integer = \"a\";\nprint(y);\n",
+      "errors": [
+        "Error semántico en línea 1, columna 0: la variable 'x' se declaró como integer pero se inicializa con un valor de tipo string.",
+        "Error semántico en línea 2, columna 6: la variable 'y' no ha sido declarada."
+      ],
+      "tac_present": false,
+      "tac_preview": []
+    },
+    {
+      "id": "multiple_errors",
+      "passed": true,
+      "input": "let a@ = 1;\nlet b: integer = 2;\nlet c# = 3;\n",
+      "errors": [
+        "Error léxico en línea 1, columna 5: carácter o secuencia no reconocida '@'.",
+        "Error léxico en línea 3, columna 5: carácter o secuencia no reconocida '#'."
+      ],
+      "tac_present": false,
+      "tac_preview": []
+    }
+  ],
+  "duration_seconds": 0.969,
+  "profile": "compiscript-v1",
+  "message": "Resultados limitados a estos cinco casos; no prueban corrección general."
+}
