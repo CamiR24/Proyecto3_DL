@@ -6,7 +6,7 @@ function el(tag, text, className){const node=document.createElement(tag);if(text
 function notice(text, error=false){$('notice').hidden=!text;$('notice').textContent=text;$('notice').className=error?'error':'';}
 function refreshButtons(){
  document.querySelectorAll('button').forEach(b=>b.disabled=busy);
- document.querySelectorAll('.step').forEach(b=>b.disabled=busy||(b.dataset.step!=='1'&&!session)||(b.dataset.step==='3'&&!report));
+ document.querySelectorAll('.step').forEach(b=>b.disabled=busy||(!['0','1'].includes(b.dataset.step)&&!session)||(b.dataset.step==='3'&&!report));
  $('export').disabled=busy||!report;
  $('copy-pending').disabled=$('download-pending').disabled=busy||!report;
  $('extract').disabled=busy||!session||!config?.model_configured;
@@ -33,7 +33,9 @@ async function api(path, data){
 function showStep(step){
  document.querySelectorAll('.page').forEach(p=>p.hidden=p.id!==`step-${step}`);
  document.querySelectorAll('.step').forEach(b=>{b.classList.toggle('active',b.dataset.step===String(step));b.setAttribute('aria-current',b.dataset.step===String(step)?'step':'false');});
- document.querySelector('.execution').hidden=String(step)==='1'||!session;
+ document.querySelector('.execution').hidden=['0','1'].includes(String(step))||!session;
+ const heading=$(String(step)==='0'?'home-title':`step-${step}-title`);
+ if(heading)heading.focus({preventScroll:true});
  window.scrollTo({top:0,behavior:'smooth'});
 }
 function invalidateReport(){report=null;$('results').replaceChildren();$('metrics').replaceChildren();$('execution-results').replaceChildren();resetResultsView();refreshButtons();}
@@ -60,6 +62,8 @@ async function filePayload(file){
 }
 function requireConsent(){if(!$('consent').checked)throw new Error('Confirma la autorización de envío al modelo antes de continuar.');}
 // renderReport, renderResults y renderExecution viven en resultados.js
+$('start-review').addEventListener('click',()=>showStep(1));
+$('home-link').addEventListener('click',event=>{event.preventDefault();if(!busy)showStep(0);});
 document.querySelectorAll('.step').forEach(b=>b.addEventListener('click',()=>showStep(b.dataset.step)));
 for(const id of ['rubric','submission'])$(id).addEventListener('change',()=>{$(`${id}-name`).textContent=$(id).files[0]?.name||'Selecciona un archivo';});
 $('prepare').addEventListener('click',()=>task('Preparando archivos y comprobando cobertura…',async()=>{

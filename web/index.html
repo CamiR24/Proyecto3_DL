@@ -3,12 +3,13 @@
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Antes de entregar · Revisor con evidencia</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/resultados.css"></head>
 <body>
-<header class="topbar"><a class="brand" href="/" aria-label="Antes de entregar, inicio"><span class="brand-mark">✓</span> Antes de entregar<span class="beta">PROTOTIPO</span></a><span class="byline">Camila &amp; Marinés · Deep Learning</span></header>
+<header class="topbar"><a id="home-link" class="brand" href="#inicio" aria-label="Antes de entregar, inicio"><span class="brand-mark">✓</span> Antes de entregar<span class="beta">PROTOTIPO</span></a><span class="byline">Camila &amp; Marinés · Deep Learning</span></header>
 <div class="layout">
 <aside class="sidebar">
  <p class="eyebrow">TU REVISIÓN, PASO A PASO</p>
- <nav aria-label="Pasos de revisión">
-  <button class="step active" data-step="1"><span class="step-number">01</span><span><strong>Prepara tu entrega</strong><small>Instrucciones, rúbrica y archivos</small></span></button>
+ <nav aria-label="Inicio y pasos de revisión">
+  <button class="step active" data-step="0" aria-current="step"><span class="step-number" aria-hidden="true">↖</span><span><strong>Inicio</strong><small>Cómo funciona la revisión</small></span></button>
+  <button class="step" data-step="1"><span class="step-number">01</span><span><strong>Prepara tu entrega</strong><small>Entrega, rúbrica e instrucciones</small></span></button>
   <button class="step" data-step="2" disabled><span class="step-number">02</span><span><strong>Confirma los criterios</strong><small>Tú decides qué se revisa</small></span></button>
   <button class="step" data-step="3" disabled><span class="step-number">03</span><span><strong>Revisa y mejora</strong><small>Observaciones con evidencia</small></span></button>
  </nav>
@@ -23,23 +24,40 @@
   <ol id="progress-steps"></ol>
   <p id="progress-long" hidden></p>
  </section>
- <section id="step-1" class="page">
-  <p class="eyebrow">MENOS DUDAS. MÁS CLARIDAD.</p><h1>Tu esfuerzo merece<br>una última revisión<span class="accent">.</span></h1>
+ <section id="step-0" class="page" aria-labelledby="home-title">
+  <p class="eyebrow">ANTES DE ENTREGAR</p>
+  <h1 id="home-title" tabindex="-1">Una segunda mirada<br>a tu trabajo<span class="accent">.</span></h1>
+  <p class="lead">Revisa tu entrega con ayuda de IA y descubre qué puedes mejorar antes de enviarla. Cada observación indica la evidencia disponible y lo que todavía necesita comprobarse.</p>
+  <div class="card welcome-card">
+   <h2>Tu revisión en tres pasos</h2>
+   <ol class="welcome-steps">
+    <li><strong>Sube tu entrega y la rúbrica.</strong><p>Adjunta tus archivos. Si no tienes una rúbrica, escribe las instrucciones de la actividad.</p></li>
+    <li><strong>Confirma qué quieres revisar.</strong><p>Escribe los criterios o pide una propuesta a la IA. Revísalos y autoriza el envío al modelo.</p></li>
+    <li><strong>Consulta las evidencias y decide qué ajustar.</strong><p>Lee las observaciones, comprueba las referencias y descarga tu revisión.</p></li>
+   </ol>
+   <div class="welcome-actions"><button id="start-review" class="primary">Comenzar mi revisión →</button><span>Puedes volver a esta guía sin perder lo que llevas.</span></div>
+  </div>
+  <div class="welcome-note"><strong>Tú tienes la última palabra.</strong><p>La revisión es orientativa y no asigna una nota automática. La IA puede equivocarse: comprueba sus conclusiones. Las llamadas al modelo pueden consumir saldo; preparar los archivos no llama al modelo.</p></div>
+ </section>
+ <section id="step-1" class="page" hidden>
+  <p class="eyebrow">MENOS DUDAS. MÁS CLARIDAD.</p><h1 id="step-1-title" tabindex="-1">Tu esfuerzo merece<br>una última revisión<span class="accent">.</span></h1>
   <p class="lead">Compara tu entrega con lo que te pidieron y descubre qué puedes mejorar, con referencias a tus propios archivos.</p>
   <div class="section-heading"><h2>01 <span>Prepara el contexto</span></h2><button id="example" class="text-button">Probar con el ejemplo de Compiscript ↗</button></div>
   <div class="card upload-card">
-   <label for="instructions">¿Qué pide la actividad? <span class="required">Obligatorio si no adjuntas rúbrica</span></label>
-   <textarea id="instructions" rows="6" maxlength="40000" placeholder="Pega las instrucciones, condiciones y restricciones de tu actividad…"></textarea>
    <div class="upload-grid">
-    <label class="file-box" for="rubric"><span class="file-icon">≡</span><strong>Tu rúbrica</strong><span>PDF con texto, TXT o MD · opcional si la pegaste arriba</span><input id="rubric" type="file" accept=".pdf,.txt,.md"><small id="rubric-name">Selecciona un archivo</small></label>
-    <label class="file-box" for="submission"><span class="file-icon">↥</span><strong>Tu entrega</strong><span>PDF con texto, TXT, MD, código o ZIP · hasta 80 MiB</span><input id="submission" type="file" accept=".pdf,.txt,.md,.zip,.py,.tsx,.ts,.js,.json"><small id="submission-name">Selecciona un archivo</small></label>
+    <label class="file-box" for="submission"><span class="file-icon" aria-hidden="true">↥</span><strong>Tu entrega</strong><span>PDF con texto, TXT, MD, código o ZIP · hasta 80 MiB</span><input id="submission" type="file" accept=".pdf,.txt,.md,.zip,.py,.tsx,.ts,.js,.json"><small id="submission-name">Selecciona un archivo</small></label>
+    <label class="file-box" for="rubric"><span class="file-icon" aria-hidden="true">≡</span><strong>Tu rúbrica</strong><span>PDF con texto, TXT o MD · opcional si escribes las instrucciones abajo</span><input id="rubric" type="file" accept=".pdf,.txt,.md"><small id="rubric-name">Selecciona un archivo</small></label>
+   </div>
+   <div class="instructions-block">
+    <label for="instructions">¿Qué pide la actividad? <span class="required" id="instructions-help">Obligatorio si no adjuntas rúbrica</span></label>
+    <textarea id="instructions" aria-describedby="instructions-help" rows="6" maxlength="40000" placeholder="Pega las instrucciones, condiciones y restricciones de tu actividad…"></textarea>
    </div>
    <div class="card-footer"><p>Los archivos se preparan localmente. No se envían al modelo hasta que lo autorices en el siguiente paso.</p><button id="prepare" class="primary">Continuar <span>→</span></button></div>
   </div>
   <div class="features"><div><span>01 /</span><strong>Requisitos claros</strong><p>Confirma cada criterio antes de revisar.</p></div><div><span>02 /</span><strong>Evidencia localizada</strong><p>Consulta el archivo y las líneas citadas.</p></div><div><span>03 /</span><strong>Próximos pasos útiles</strong><p>Identifica qué corregir y qué verificar.</p></div></div>
  </section>
  <section id="step-2" class="page" hidden>
-  <p class="eyebrow">ANTES DE PEDIR UNA SEGUNDA MIRADA</p><h1>¿Qué vamos a revisar<span class="accent">?</span></h1><p class="lead">Confirma los criterios y comprueba qué archivos se pudieron leer.</p>
+  <p class="eyebrow">ANTES DE PEDIR UNA SEGUNDA MIRADA</p><h1 id="step-2-title" tabindex="-1">¿Qué vamos a revisar<span class="accent">?</span></h1><p class="lead">Confirma los criterios y comprueba qué archivos se pudieron leer.</p>
   <div class="card"><div class="section-heading"><h2>Criterios de revisión</h2><button id="extract" class="secondary">Proponer con IA</button></div>
    <p class="muted">Escribe un criterio por línea. Usa <code>[R]</code> al inicio para marcar una restricción obligatoria. Máximo 30.</p>
    <label for="criteria">Criterios que confirmas para esta revisión</label><textarea id="criteria" rows="12" placeholder="Generación de código intermedio para expresiones aritméticas.&#10;[R] No generar representación intermedia si se encuentra algún error."></textarea>
