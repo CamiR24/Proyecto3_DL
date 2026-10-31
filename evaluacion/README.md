@@ -34,6 +34,8 @@ La aplicación no envía toda la entrega: el ZIP de ejemplo tiene 295 archivos y
 - `test` tiene 5 casos (10 al sumar los de Camila): sirve para detectar fallas gruesas, no para comparar con precisión dos configuraciones.
 - Los 2 casos `test` del ejemplo usan los mismos archivos que los casos `dev`; lo que se reserva son los criterios y sus referencias, no los documentos.
 - Estados de restricciones: `cumplido` significa que se respeta, y `faltante` que falta lo que la actividad exige (por ejemplo, no hay generador de analizadores). No se usa `faltante` para «se viola una prohibición»; si se necesita, decidirlo con Camila antes de agregar casos.
+- Criterios que piden un artefacto externo (registro de ejecución, mediciones, sesión con usuarios, verificación de hechos externos): si la entrega completa no lo contiene, el estado de referencia es `no_verificable` (casos C09, C10, C11, C18, M05, M06). `faltante` queda como lectura alternativa y `parcial` se acepta en C09 porque existe la prueba escrita. En cambio, un criterio de comportamiento con pruebas escritas pero sin ejecución es `parcial` (M04).
+- Las instrucciones compartidas de las entregas de Camila (`instrucciones_componentes.txt`) solo describen la actividad: se quitaron las frases que anticipaban cómo tratar pruebas sin ejecutar, mediciones, sesiones con usuarios y comentarios dirigidos al revisor, para no darles pistas de la respuesta. Aun así, los casos de Camila son de 2 a 12 líneas y con un solo estado aceptable (salvo C09): se espera una exactitud más alta que con los míos y no son comparables entre sí.
 - `faltante` solo se acepta con cobertura completa (sin archivos omitidos ni recortes). `scripts/validar_casos.py` lo exige.
 
 ## Cómo validar (la otra integrante)
