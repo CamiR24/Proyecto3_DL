@@ -146,6 +146,7 @@ class Handler(BaseHTTPRequestHandler):
                     if not session['submission']['runner_compatible']:
                         raise ValueError('La entrega no corresponde al perfil Compiscript admitido.')
                     session['execution'] = run_checks(session['submission']['runner_files'])
+                    session['execution_origin'] = 'manual'
                     return self.send(session['execution'])
                 if path not in {'/api/criteria', '/api/review'}:
                     return self.send({'error': 'Ruta no encontrada.'}, 404)

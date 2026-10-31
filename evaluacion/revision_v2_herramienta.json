@@ -1,0 +1,141 @@
+{
+  "results": [
+    {
+      "id": "C01",
+      "text": "Comprobar mediante la herramienta disponible que los cinco casos del perfil compiscript-v1 aprueban. Informar únicamente el comportamiento observado en esos casos.",
+      "kind": "rubrica",
+      "state": "cumplido",
+      "evidence_type": "ejecucion",
+      "explanation": "Ejecuté el perfil compiscript-v1 y los cinco casos aprobaron: valid_tac (genera TAC para f(1)), lexical_blocks_tac y multiple_errors (reportan errores léxicos y no generan TAC), syntax_blocks_tac (reporta error sintáctico sin TAC) y semantic_blocks_tac (reporta errores semánticos sin TAC). El resultado solo confirma el comportamiento observado en estos cinco casos y no prueba corrección general del compilador.",
+      "suggestion": "Si el grupo quiere respaldar más comportamiento, agregar casos propios de TAC (aritmética, control de flujo, clases) y ejecutarlos con el mismo procedimiento.",
+      "needs_verification": "Los cinco casos no cubren las demás filas de la rúbrica (arreglos, clases, herencia, try/catch, reciclaje de temporales, etc.).",
+      "evidence": [],
+      "test_ids": [
+        "valid_tac",
+        "lexical_blocks_tac",
+        "syntax_blocks_tac",
+        "semantic_blocks_tac",
+        "multiple_errors"
+      ],
+      "warnings": [],
+      "answered": true,
+      "invalid_state": false,
+      "citations_dropped": 0
+    }
+  ],
+  "validation": {
+    "criteria": 1,
+    "unanswered": 0,
+    "invalid_states": 0,
+    "citations_kept": 0,
+    "citations_dropped": 0
+  },
+  "metrics": {
+    "model": "claude-haiku-5-5",
+    "prompt_tokens": 161277,
+    "completion_tokens": 515,
+    "total_tokens": 161792,
+    "duration_seconds": 7.16,
+    "estimated_cost_usd": null,
+    "cost_note": "Estimación con precios configurados; no considera descuentos de caché ni otros cargos."
+  },
+  "prompt_version": "review-v2.txt",
+  "prompt_sha256": "6dda1b6638d03f6d23a64a199911aa57cdb4d52820ea202462f3659b57e8ddaa",
+  "criteria": [
+    {
+      "id": "C01",
+      "text": "Comprobar mediante la herramienta disponible que los cinco casos del perfil compiscript-v1 aprueban. Informar únicamente el comportamiento observado en esos casos.",
+      "kind": "rubrica"
+    }
+  ],
+  "execution": {
+    "status": "completed",
+    "executed": true,
+    "cases": [
+      {
+        "id": "valid_tac",
+        "passed": true,
+        "input": "function f(a: integer): integer { return a + 1; }\nprint(f(1));\n",
+        "errors": [],
+        "tac_present": true,
+        "tac_preview": [
+          "func f(a):",
+          "    $t1 = a + 1",
+          "    return $t1",
+          "endfunc",
+          "func __main():",
+          "    param 1",
+          "    $t1 = call f, 1",
+          "    print $t1",
+          "endfunc"
+        ]
+      },
+      {
+        "id": "lexical_blocks_tac",
+        "passed": true,
+        "input": "let a@ = 1;\n",
+        "errors": [
+          "Error léxico en línea 1, columna 5: carácter o secuencia no reconocida '@'."
+        ],
+        "tac_present": false,
+        "tac_preview": []
+      },
+      {
+        "id": "syntax_blocks_tac",
+        "passed": true,
+        "input": "let a: integer = ;\n",
+        "errors": [
+          "Error sintáctico en línea 1, columna 17: se encontró ';', pero se esperaba '(', '-', '!', 'null', 'true' o 'false', entre otros."
+        ],
+        "tac_present": false,
+        "tac_preview": []
+      },
+      {
+        "id": "semantic_blocks_tac",
+        "passed": true,
+        "input": "let x: integer = \"a\";\nprint(y);\n",
+        "errors": [
+          "Error semántico en línea 1, columna 0: la variable 'x' se declaró como integer pero se inicializa con un valor de tipo string.",
+          "Error semántico en línea 2, columna 6: la variable 'y' no ha sido declarada."
+        ],
+        "tac_present": false,
+        "tac_preview": []
+      },
+      {
+        "id": "multiple_errors",
+        "passed": true,
+        "input": "let a@ = 1;\nlet b: integer = 2;\nlet c# = 3;\n",
+        "errors": [
+          "Error léxico en línea 1, columna 5: carácter o secuencia no reconocida '@'.",
+          "Error léxico en línea 3, columna 5: carácter o secuencia no reconocida '#'."
+        ],
+        "tac_present": false,
+        "tac_preview": []
+      }
+    ],
+    "duration_seconds": 0.98,
+    "profile": "compiscript-v1",
+    "message": "Resultados limitados a estos cinco casos; no prueban corrección general."
+  },
+  "execution_trace": {
+    "tools_enabled": true,
+    "tool_requested": true,
+    "tool_name": "run_compiscript_checks",
+    "tool_call_id": "toolu_01CSFV89HxEhccJZEs4WVGzv",
+    "execution_available_before_review": false,
+    "execution_reused": false,
+    "runner_invoked": true,
+    "execution_origin": "model_tool"
+  },
+  "submission_sha256": "3a5bdc4ef90f592ac274446fc5eeb85fa06575774c36de2fa1dc796bffc15507",
+  "assignment_sha256": "a050cb37e298d1e729ddcb63c30f7b7a760191ff4f9c41725bcd5e43234fb459",
+  "coverage": {
+    "files": 37,
+    "warnings": [
+      "Se recortó Compilers-2-CC3032/src/semantic/checker.py; solo se analiza el comienzo.",
+      "258 archivos omitidos (dependencias, generados, binarios o límites). La revisión solo cubre los archivos enumerados."
+    ]
+  },
+  "notice": "Revisión orientativa. Las citas se validan por coincidencia textual, no por corrección semántica. Una prueba aprobada solo respalda el caso ejecutado. No se asigna nota automática.",
+  "exported_at": "2026-10-31T00:49:15.050Z"
+}

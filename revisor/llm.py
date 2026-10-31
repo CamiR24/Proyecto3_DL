@@ -244,6 +244,14 @@ def review(session, criteria, allow_execution=False, baseline=False, prompt_file
     started = time.monotonic()
     usages = []
     can_call = bool(allow_execution and not baseline and session['submission']['runner_compatible'])
+    # Registro de esta revisión: separa la solicitud del modelo del origen
+    # de los resultados. Un resultado disponible no demuestra tool calling.
+    trace = {'tools_enabled': can_call, 'tool_requested': False,
+             'tool_name': None, 'tool_call_id': None,
+             'execution_available_before_review': bool(session.get('execution')),
+             'execution_reused': False, 'runner_invoked': False,
+             'execution_origin': session.get('execution_origin', 'unknown')
+             if session.get('execution') else None}
     message, usage = completion(messages, [TOOL] if can_call else None)
     usages.append(usage)
     if message.get('tool_calls'):
@@ -260,8 +268,17 @@ def review(session, criteria, allow_execution=False, baseline=False, prompt_file
             raise ValueError('Argumentos de herramienta inválidos.') from exc
         if arguments != {'profile': 'compiscript-v1'}:
             raise ValueError('La herramienta solo admite el perfil fijo compiscript-v1.')
-        execution = session.get('execution') or run_checks(session['submission']['runner_files'])
-        session['execution'] = execution
+        trace.update(tool_requested=True, tool_name=function['name'],
+                     tool_call_id=call['id'])
+        if session.get('execution'):
+            execution = session['execution']
+            trace['execution_reused'] = True
+        else:
+            trace['runner_invoked'] = True
+            execution = run_checks(session['submission']['runner_files'])
+            session['execution'] = execution
+            session['execution_origin'] = 'model_tool'
+        trace['execution_origin'] = session.get('execution_origin', 'unknown')
         messages.extend([{'role': 'assistant', 'content': message.get('content'), 'tool_calls': calls},
                          {'role': 'tool', 'tool_call_id': call['id'],
                           'content': json.dumps(execution, ensure_ascii=False)}])
@@ -275,6 +292,7 @@ def review(session, criteria, allow_execution=False, baseline=False, prompt_file
     return {'results': results, 'validation': validation_summary(results), 'metrics': metrics(usages, started),
             'prompt_version': prompt_file, 'prompt_sha256': hashlib.sha256(prompt.encode()).hexdigest(),
             'criteria': criteria, 'execution': session.get('execution'),
+            'execution_trace': trace,
             'submission_sha256': session['submission_sha256'],
             'assignment_sha256': hashlib.sha256(session['assignment'].encode()).hexdigest(),
             'coverage': {'files': len(docs), 'warnings': session['submission']['warnings']},

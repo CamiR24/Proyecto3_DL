@@ -315,6 +315,18 @@ function resetResultsView() {
  $('coverage-banner').hidden = $('validation-banner').hidden = true;
  $('review-progress').textContent = '';
 }
+function executionTraceNotice(trace) {
+ if (!trace) return ''; // Exportaciones anteriores no registraban solicitudes.
+ const origin = {manual: 'ejecución manual', model_tool: 'una solicitud del modelo', unknown: 'origen no registrado'};
+ const source = origin[trace.execution_origin] || 'origen no registrado';
+ if (trace.tool_requested) {
+  if (trace.execution_reused) return `La IA solicitó la herramienta y recibió resultados anteriores (${source}); no se ejecutaron pruebas nuevas.`;
+  return 'La IA solicitó la herramienta y se invocó el ejecutor en esta revisión; consulta abajo el resultado.';
+ }
+ if (trace.execution_available_before_review) return `La IA recibió resultados anteriores (${source}); no solicitó la herramienta en esta revisión.`;
+ return 'La IA no solicitó la herramienta y no recibió resultados de ejecución.';
+}
+
 function renderReport(value) {
  report = value;
  reviewed = new Set();
@@ -325,6 +337,8 @@ function renderReport(value) {
   [m.estimated_cost_usd == null ? 'Sin precio configurado' : `$${m.estimated_cost_usd.toFixed(4)}`, 'Costo estimado · USD']];
  $('metrics').replaceChildren(...boxes.map(([v, label]) => {const d = el('div', undefined, 'metric'); d.append(el('strong', v), el('span', label)); return d;}));
  $('report-notice').textContent = `${value.notice} Modelo: ${m.model}. Tokens: ${m.total_tokens}. Prompt: ${value.prompt_version}.`;
+ const traceNotice = executionTraceNotice(value.execution_trace);
+ if (traceNotice) $('report-notice').textContent += ` ${traceNotice}`;
  renderBanners(value);
  renderResults();
  renderExecution(value.execution);
