@@ -3,3 +3,7 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Instaladores y respaldos locales
+actualizacion_*/
+respaldos_actualizacion/

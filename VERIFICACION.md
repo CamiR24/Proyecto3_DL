@@ -1,3 +1,22 @@
+# Verificación actual y registro histórico
+
+## Auditoría del ZIP recibido
+
+- Python 3.12.14: 77 pruebas automatizadas aprobadas, sin API ni Docker.
+- Validador: 40 casos en dos archivos, 30 dev / 10 test, 0 pendientes de validación humana.
+- Interfaz: v2 seleccionado; inicio, nuevo orden de campos y tamaños ampliados presentes.
+- Docker: se verificó el registro aportado de cinco pruebas aprobadas; no se volvió a ejecutar aquí.
+- Modelo real: se verificaron JSON de corridas y la traza de una solicitud de herramienta; no hubo nuevas llamadas.
+- Se auditaron 16 corridas originales; dos de v2 están incompletas (3/15 resultados).
+- Las cifras de Camila no cambian. Dos baseline de Marinés pasan de 10/15 a 8/15 con las referencias actuales.
+- La “Iteración 2” global y la comparación baseline/v2 sobre diez test no están en este ZIP.
+- El mínimo de Python no está certificado: 3.12 es la versión recomendada comprobada; 3.9.6 aparece en corridas históricas.
+- Las capturas, el video y el ensayo no están acreditados en este paquete.
+
+Ver `evaluacion/AUDITORIA_ENTREGA.md` y la auditoría de puntuaciones separada. Las verificaciones históricas siguientes describen el estado inicial y no los pendientes actuales.
+
+---
+
 # Verificación de la versión inicial
 
 Fecha: 26 de octubre de 2026.

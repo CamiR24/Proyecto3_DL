@@ -4,13 +4,18 @@ Primera versión del revisor de entregas de Camila y Marinés para el Proyecto 3
 
 ## Estado de esta entrega
 
-- Implementado: interfaz web local, lectura de PDF con texto/TXT/MD/código/ZIP, selección y cobertura de archivos, criterios manuales y extracción con LLM, baseline y prompt mejorado, validación textual de citas, registro de tokens/latencia/costo configurado y exportación JSON.
-- Implementado: solicitud de herramienta por el modelo, condicionada a autorización; ejecutor Docker con un perfil fijo y límites; ejecución manual del mismo perfil desde la interfaz.
-- Pendiente de validar en su computadora: construir la imagen, ejecutar realmente las cinco pruebas en Docker y conectar un modelo real. En el entorno de desarrollo de esta entrega no había Docker ni se configuró una llave de API.
-- El ejemplo no contiene una revisión generada ni pruebas aprobadas ficticias. El contexto y los criterios del ejemplo son materiales preparados; los resultados aparecen después de una revisión o ejecución real.
-- Uso previsto: prototipo local supervisado. No es un servicio público multiusuario ni un entorno certificado para ejecutar código adversarial.
+- Interfaz local con inicio explicativo, entrega y rúbrica antes de instrucciones, texto ampliado y revisión de criterios, evidencia y pendientes.
+- `review-v2.txt` es la selección inicial de la interfaz; v1 y baseline siguen disponibles. Se eligió v2 a partir de desarrollo, no ajustando a los errores de test.
+- 40 casos registrados y validados por la otra integrante (30 dev / 10 test). La validación fue asistida y no ciega.
+- 77 pruebas automatizadas aprobadas en la auditoría del ZIP con Python 3.12.14. Las corridas de Camila registran Python 3.12.5.
+- Conexión real al modelo, cinco pruebas Docker aprobadas y solicitud real de herramienta desde la interfaz documentadas en `evaluacion/`.
+- Dos usuarios dieron retroalimentación, se implementaron tres cambios y ambos valoraron positivamente la nueva versión. No se midieron tiempos ni éxito por tarea.
+- Las corridas originales son evidencia histórica: algunas puntuaciones de Marinés requieren el recálculo contra referencias actuales, sin editar los originales. Ver `evaluacion/AUDITORIA_ENTREGA.md`.
+- Prototipo local supervisado; no es un servicio público ni un entorno certificado para código adversarial.
 
-## 1. Iniciar la aplicación (macOS o Linux, Python 3.11+)
+## 1. Iniciar la aplicación (macOS o Linux, Python 3.12 recomendado)
+
+La versión recomendada y comprobada en esta auditoría es Python 3.12. Se conserva 3.11 como requisito de instalación declarado; su límite mínimo no se certificó con una matriz de pruebas. Hay corridas históricas de API bajo 3.9.6, pero no demuestran que la versión actual completa y sus dependencias se hayan probado allí. No rebajar el requisito a 3.9 sin ejecutar la suite y la instalación en ese entorno.
 
 Desde la carpeta que contiene este README:
 
@@ -28,7 +33,7 @@ Abre **http://127.0.0.1:8000**. Para detenerla, Ctrl+C. Puedes cargar archivos y
 
 Edita `.env` y completa `LLM_API_KEY` y `LLM_MODEL` con una llave y un ID de modelo disponible en su cuenta. No pegues la llave en el navegador, un commit o una captura. Reinicia `app.py` después de cambiar la configuración.
 
-La integración usa `POST /chat/completions` del `LLM_BASE_URL` configurado; por defecto, `https://api.openai.com/v1`. Requiere un modelo compatible con JSON mode (`response_format: json_object`), `max_completion_tokens` y, para solicitar pruebas, function calling. La compatibilidad con otros proveedores debe comprobarse; no se garantiza solo porque anuncien compatibilidad parcial con OpenAI. No se eligió ni se cobró un modelo automáticamente.
+La integración usa `POST /chat/completions` del `LLM_BASE_URL` configurado; por defecto, `https://api.openai.com/v1`. Solicita JSON mediante el prompt y valida el formato después; actualmente no envía `response_format`. Requiere compatibilidad con `max_completion_tokens` y, para solicitar pruebas, function calling. La compatibilidad con otros proveedores debe comprobarse; no se garantiza solo porque anuncien compatibilidad parcial con OpenAI. No se eligió ni se cobró un modelo automáticamente.
 
 Antes de llamar al modelo, marca en la interfaz la autorización para enviar el texto seleccionado. La extracción de criterios también consume tokens. Si no deseas usarla, escribe un criterio por línea. Una línea que comienza con `[R]` es una restricción obligatoria.
 
@@ -68,7 +73,7 @@ El aislamiento por contenedores no es una garantía absoluta. La prueba importa 
 
 ## 4. Flujo de uso
 
-1. Pega instrucciones, carga rúbrica y entrega, o usa el ejemplo preparado.
+1. Consulta Inicio y pulsa Comenzar. Carga entrega y rúbrica, agrega instrucciones si corresponde, o usa el ejemplo preparado.
 2. Comprueba los archivos seleccionados y advertencias de cobertura. Los PDF escaneados requieren OCR fuera de esta versión.
 3. Escribe criterios o autoriza una propuesta del LLM; corrige el resultado antes de revisar.
 4. Opcionalmente ejecuta las pruebas desde el botón; también puedes permitir que el LLM las solicite.
@@ -115,15 +120,31 @@ Para comparar prompting, conserva exactamente los mismos archivos, criterios y e
 python scripts/compare_reports.py baseline.json mejorado.json
 ```
 
-El script resume cambios, tiempos, tokens y costo; **no mide exactitud sin referencias humanas**. `examples/casos_semilla.jsonl` contiene ocho observaciones iniciales sobre el ejemplo, no un conjunto final validado ni ocho entregas independientes. Ambas deben revisarlas, definir etiquetas y ampliar a 30-50 casos representativos de varias entregas. Separar desarrollo y prueba; no inflar el tamaño contando como independientes variantes casi idénticas del mismo proyecto. Posibles métricas: acuerdo por estado con referencias humanas, precisión de hallazgos y pertinencia de evidencia. Para UX, observar si compañeros completan la revisión y entienden los pendientes.
+El script resume cambios, tiempos, tokens y costo; **no mide exactitud sin referencias humanas**. `examples/casos_semilla.jsonl` contiene ocho observaciones iniciales sobre el ejemplo, no un conjunto final validado ni ocho entregas independientes. Se ampliaron a los 40 casos de `evaluacion/casos_camila.jsonl` y `evaluacion/casos_marines.jsonl`, con validación cruzada registrada. Separar desarrollo y prueba; no inflar el tamaño contando como independientes variantes casi idénticas del mismo proyecto. Posibles métricas: acuerdo por estado con referencias humanas, precisión de hallazgos y pertinencia de evidencia. Para UX, observar si compañeros completan la revisión y entienden los pendientes.
 
 El JSON exportado incluye versiones y hash del prompt, hashes de entrega/instrucciones, criterios, evidencia seleccionada, resultados de ejecución y métricas. No se guardan automáticamente archivos ni revisiones en disco; exporta lo necesario para conservar experimentos y revísalo antes de compartir.
 
-## 7. Siguiente trabajo compartido
+## 7. Reproducir la auditoría y cerrar la entrega
 
-- Camila: mejorar entrada, edición de criterios y selección de documentos; preparar 20 casos. Marinés revisa e implementa una mejora en ese flujo.
-- Marinés: mejorar resultados, evidencia y panel de pruebas; preparar otros 20 casos. Camila revisa e implementa una mejora en ese flujo.
-- Juntas: elegir modelo y presupuesto, conectar API, probar Docker, validar referencias, ejecutar baseline/variantes y observar pruebas con compañeros. Redactar y presentar ambas todo el pipeline.
+```bash
+python scripts/validar_casos.py
+python -m unittest discover -s tests -v
+python scripts/auditar_corridas.py --out evaluacion/auditoria_corridas_nueva.json
+```
+
+El archivo de salida de auditoría debe ser nuevo y quedar fuera de `evaluacion/corridas/`. No llama a la API ni ejecuta Docker; puntúa respuestas históricas con las referencias actuales y conserva los originales.
+
+Pendientes documentales: incorporar capturas reales, confirmar la fecha no registrada en el JSON de Docker, aportar los archivos de la segunda iteración si se reporta, y completar video y ensayo. Una validación ciega adicional es opcional y no se ha realizado.
+
+## Precios y evidencia de ejecución
+
+Consulta oficial: 30 de octubre de 2026. Claude Haiku 5.5: para prompts de hasta 100,000 tokens de entrada, 0.10 USD/millón de entrada y 0.50 USD/millón de salida; para prompts mayores, 0.50 y 2.50 USD/millón. El umbral se aplica por solicitud, no al total agregado de una revisión de dos llamadas. Caché y otras modalidades tienen tarifas específicas. El estimador actual usa precios configurados planos: verificar el tramo antes de utilizarlo con solicitudes largas.
+
+Fuente: https://platform.claude.com/docs/en/models/haiku-5-5/overview#pricing
+
+Docker directo: `evaluacion/runner_compiscript_v1.json`, cinco aprobadas, 0.969 s. Comando utilizado: `ENABLE_RUNNER=1 python scripts/check_runner.py > evaluacion/runner_compiscript_v1.json`. El JSON original no registra fecha; no deducirla de la hora de modificación del ZIP.
+
+Herramienta solicitada por el modelo: `evaluacion/revision_v2_herramienta.json`, cinco aprobadas, origen `model_tool`, sin reutilización. `exported_at` registra la fecha de exportación, no necesariamente la hora exacta del ejecutor.
 
 ## Referencias técnicas consultadas
 

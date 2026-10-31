@@ -1,3 +1,7 @@
+# Evaluación del revisor
+
+Estado actual: 40 casos, 30 dev / 10 test y validación cruzada registrada para todos. La revisión fue asistida y no ciega. Este documento conserva también el detalle de los 20 casos originales de Marinés. El resumen de corridas verificadas y pendientes está en `AUDITORIA_ENTREGA.md`.
+
 # Conjunto de evaluación (casos de Marinés)
 
 20 casos en `casos_marines.jsonl`. Camila agrega los suyos como `casos_camila.jsonl` con el mismo formato. Todo está **pendiente de validación humana**: ningún caso tiene `human_validated: true` hasta que la otra integrante lo revise.
@@ -19,7 +23,7 @@ Un caso es **un criterio aplicado a una entrega**, con el estado que un revisor 
 
 La aplicación no envía toda la entrega: el ZIP de ejemplo tiene 295 archivos y el revisor recibe 37 (límite de 140 000 caracteres). `gen_control.py`, `gen_classes.py`, `layout.py` y `docs/tac.md` quedan fuera. El código existe y funciona, pero un revisor que dice «cumplido» para try/catch sin verlo estaría afirmando algo sin evidencia. Por eso, en esos casos la referencia es `no_verificable` o `parcial`, y la nota del caso lo aclara. La referencia **no** mide si el proyecto es bueno, sino si el revisor concluye lo que sus evidencias permiten.
 
-## Composición
+## Composición original de Marinés
 
 | | Cantidad |
 | --- | --- |
@@ -34,7 +38,7 @@ La aplicación no envía toda la entrega: el ZIP de ejemplo tiene 295 archivos y
 - `test` tiene 5 casos (10 al sumar los de Camila): sirve para detectar fallas gruesas, no para comparar con precisión dos configuraciones.
 - Los 2 casos `test` del ejemplo usan los mismos archivos que los casos `dev`; lo que se reserva son los criterios y sus referencias, no los documentos.
 - Estados de restricciones: `cumplido` significa que se respeta, y `faltante` que falta lo que la actividad exige (por ejemplo, no hay generador de analizadores). No se usa `faltante` para «se viola una prohibición»; si se necesita, decidirlo con Camila antes de agregar casos.
-- Criterios que piden un artefacto externo (registro de ejecución, mediciones, sesión con usuarios, verificación de hechos externos): si la entrega completa no lo contiene, el estado de referencia es `no_verificable` (casos C09, C10, C11, C18, M05, M06). `faltante` queda como lectura alternativa y `parcial` se acepta en C09 porque existe la prueba escrita. En cambio, un criterio de comportamiento con pruebas escritas pero sin ejecución es `parcial` (M04).
+- Criterios que piden un artefacto externo (registro de ejecución, mediciones, sesión con usuarios, verificación de hechos externos): si la entrega completa no lo contiene, el estado de referencia es `no_verificable` (casos C09, C10, C11, C18, M05, M06). `faltante` es una interpretación discutida, pero solo cuenta como aceptable si figura explícitamente en acceptable_states. C09 acepta no_verificable o parcial; C11 solo no_verificable. M16 acepta no_verificable o faltante. No ampliar alternativas después de observar test para mejorar la puntuación. En cambio, un criterio de comportamiento con pruebas escritas pero sin ejecución es `parcial` (M04).
 - Las instrucciones compartidas de las entregas de Camila (`instrucciones_componentes.txt`) solo describen la actividad: se quitaron las frases que anticipaban cómo tratar pruebas sin ejecutar, mediciones, sesiones con usuarios y comentarios dirigidos al revisor, para no darles pistas de la respuesta. Aun así, los casos de Camila son de 2 a 12 líneas y con un solo estado aceptable (salvo C09): se espera una exactitud más alta que con los míos y no son comparables entre sí.
 - `faltante` solo se acepta con cobertura completa (sin archivos omitidos ni recortes). `scripts/validar_casos.py` lo exige.
 
@@ -81,7 +85,7 @@ python scripts/evaluar.py --prompt v2 --split test --final --yes  # solo con la 
 Prompts: `baseline` (`baseline-v1.txt`), `improved` (`review-v1.txt`) y `v2` (`review-v2.txt`). Cada corrida guarda en `evaluacion/corridas/` un JSON con la configuración (modelo, host, hash del prompt, commit, parámetros de generación), las respuestas por criterio, las métricas y los casos sin resultado. Revisa ese archivo antes de compartirlo.
 
 - **Sin herramientas:** estas corridas no usan el ejecutor Docker, para aislar el efecto del prompt.
-- **No determinismo:** `claude-haiku-5-5` no admite fijar `temperature` ni `top_p`, y el proveedor dejará de aceptarlos en todos los modelos. Dos corridas con el mismo prompt pueden diferir. Repite cada configuración al menos 2 o 3 veces y reporta el rango, no una sola cifra.
+- **No determinismo:** En esta integración no se fijan `temperature` ni `top_p`; la documentación del modelo indica omitir esos parámetros. Esto no debe generalizarse a todos los modelos o proveedores. Dos corridas con el mismo prompt pueden diferir. Repite cada configuración al menos 2 o 3 veces y reporta el rango, no una sola cifra.
 - **Una llamada por entrega:** los 12 criterios del ejemplo van juntos en una solicitud, igual que en la aplicación.
 - **Partición reservada:** `--split test` exige `--final`. No lo uses para decidir qué prompt conservar.
 - **Prompts y fuga de información:** `review-v2.txt` usa tres ejemplos de otro dominio (una API de biblioteca) para no incluir contenido de los casos. Aun así, quien escribió los casos también diseñó el prompt; dilo en el informe y deja que la otra integrante valide las referencias antes de interpretar diferencias pequeñas.
